@@ -161,76 +161,80 @@
         // CONFIGURATION
         const SHEET_ID = '1-LJvYKvw0Pgt6vCA6aSFROMwsmY3JLraujWUSVbpAd8';
         
-async function fetchHoardData() {
-    try {
-        console.log('Starting fetch...');
-        
-        // Fetch hoard data from Google Sheet
-        const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Hoard`;
-        console.log('Fetching from:', sheetUrl);
-        
-        const response = await fetch(sheetUrl);
-        const text = await response.text();
-        console.log('Got response, length:', text.length);
-        
-        // Parse the JSONP response
-        const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
-        if (!jsonMatch) {
-            var json = JSON.parse(text.substr(47).slice(0, -2));
-        } else {
-            var json = JSON.parse(jsonMatch[1]);
-        }
-        
-        console.log('Parsed JSON successfully');
-        
-        // Get metal data from "The Hoard" sheet
-        const rows = json.table.rows;
-        let metals = {};
-        
-        for (let i = 1; i < rows.length; i++) {
-            const cells = rows[i].c;
-            if (cells && cells[0] && cells[1]) {
-                const metalName = cells[0].v;
-                const weight = parseFloat(cells[1].v) || 0;
+        async function fetchHoardData() {
+            try {
+                console.log('Starting fetch...');
                 
-                if (metalName && weight > 0 && !metalName.toLowerCase().includes('hoard')) {
-                    metals[metalName] = weight;
-                    console.log('✅ Added metal:', metalName, weight);
+                // Fetch hoard data from "The Hoard" sheet
+                const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Hoard`;
+                console.log('Fetching metals from The Hoard sheet...');
+                
+                const response = await fetch(sheetUrl);
+                const text = await response.text();
+                
+                // Parse the JSONP response
+                const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
+                const json = jsonMatch ? JSON.parse(jsonMatch[1]) : JSON.parse(text.substr(47).slice(0, -2));
+                
+                console.log('Parsed metals data');
+                
+                // Get metal data from "The Hoard" sheet
+                const rows = json.table.rows;
+                let metals = {};
+                
+                for (let i = 1; i < rows.length; i++) {
+                    const cells = rows[i].c;
+                    if (cells && cells[0] && cells[1]) {
+                        const metalName = cells[0].v;
+                        const weight = parseFloat(cells[1].v) || 0;
+                        
+                        if (metalName && weight > 0 && !metalName.toLowerCase().includes('hoard')) {
+                            metals[metalName] = weight;
+                            console.log('✅ Added metal:', metalName, weight);
+                        }
+                    }
                 }
+                
+                console.log('All metals:', metals);
+                
+                // Fetch prices from "The Great Ledger" sheet K2:K5
+                const ledgerUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Great%20Ledger&range=K2:K5`;
+                console.log('Fetching prices from The Great Ledger...');
+                
+                const pricesResponse = await fetch(ledgerUrl);
+                const pricesText = await pricesResponse.text();
+                const pricesJsonMatch = pricesText.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
+                const pricesJson = pricesJsonMatch ? JSON.parse(pricesJsonMatch[1]) : JSON.parse(pricesText.substr(47).slice(0, -2));
+                
+                console.log('Prices JSON:', pricesJson);
+                
+                // Extract prices - K2=copper, K3=silver, K4=gold, K5=platinum
+                const pricesRows = pricesJson.table.rows;
+                
+                // Check if we got the data
+                if (!pricesRows || pricesRows.length < 4) {
+                    throw new Error('Not enough price data in sheet');
+                }
+                
+                const prices = {
+                    copper: parseFloat(pricesRows[0].c[0].v),    // K2 = copper
+                    silver: parseFloat(pricesRows[1].c[0].v),    // K3 = silver
+                    gold: parseFloat(pricesRows[2].c[0].v),      // K4 = gold
+                    platinum: parseFloat(pricesRows[3].c[0].v)   // K5 = platinum
+                };
+                
+                console.log('Got prices from sheet:', prices);
+                
+                // Display the data
+                displayHoard(metals, prices);
+                
+            } catch (error) {
+                console.error('ERROR:', error);
+                console.error('Error message:', error.message);
+                document.getElementById('hoard-data').innerHTML = 
+                    `<p style="color: #ff6b6b;">Error loading data. Check console.</p>`;
             }
         }
-        
-        console.log('All metals:', metals);
-        
-        // Fetch prices from "The Great Ledger" sheet (no API call!)
-        const ledgerUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Great%20Ledger&range=K2:K5`;
-        console.log('Fetching prices from ledger...');
-        
-        const pricesResponse = await fetch(ledgerUrl);
-        const pricesText = await pricesResponse.text();
-        const pricesJsonMatch = pricesText.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
-        const pricesJson = pricesJsonMatch ? JSON.parse(pricesJsonMatch[1]) : JSON.parse(pricesText.substr(47).slice(0, -2));
-        
-        const pricesRows = pricesJson.table.rows;
-        const prices = {
-            copper: parseFloat(pricesRows[0].c[0].v),
-            silver: parseFloat(pricesRows[1].c[0].v),
-            gold: parseFloat(pricesRows[2].c[0].v),
-            platinum: parseFloat(pricesRows[3].c[0].v)
-        };
-        
-        console.log('Got prices from sheet:', prices);
-        
-        // Display the data
-        displayHoard(metals, prices);
-        
-    } catch (error) {
-        console.error('ERROR:', error);
-        console.error('Error message:', error.message);
-        document.getElementById('hoard-data').innerHTML = 
-            `<p style="color: #ff6b6b;">Error: ${error.message}<br>Check console for details</p>`;
-    }
-}
         
         function displayHoard(metals, prices) {
             let totalValue = 0;
