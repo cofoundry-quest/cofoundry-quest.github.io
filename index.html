@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valorforge - The Cofoundry</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cinzel', 'Georgia', serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2416 100%);
+            color: #d4af37;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 60px 40px;
+            border-radius: 10px;
+            border: 2px solid #d4af37;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        }
+        
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #b8960f;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .intro {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            color: #e6d5a0;
+        }
+        
+        .hoard-display {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            border-radius: 8px;
+            margin: 40px 0;
+            border: 1px solid #8b7355;
+        }
+        
+        .hoard-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+        
+        .metal-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            margin: 10px 0;
+            background: rgba(139, 115, 85, 0.2);
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+        
+        .metal-name {
+            font-weight: bold;
+        }
+        
+        .metal-weight {
+            color: #fff;
+        }
+        
+        .total-value {
+            font-size: 1.8em;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 5px;
+            color: #ffd700;
+        }
+        
+        .discord-button {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 20px 50px;
+            background: #5865f2;
+            color: white;
+            text-decoration: none;
+            font-size: 1.3em;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4);
+        }
+        
+        .discord-button:hover {
+            background: #4752c4;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.6);
+        }
+        
+        .quote {
+            margin-top: 40px;
+            font-style: italic;
+            color: #b8960f;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+        
+        .loading {
+            font-size: 1.2em;
+            color: #b8960f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚒️ VALORFORGE ⚒️</h1>
+        <p class="subtitle">The Cofoundry of Nashville</p>
+        
+        <div class="intro">
+            <p>We turn scrap into treasure. Through collective labor and democratic ownership, 
+            we're building a hoard of precious metals — not to sell, but to prove what cooperation can achieve.</p>
+            <p style="margin-top: 15px;">Every pound of copper, every ounce of silver is a permanent contribution 
+            to something greater than yourself.</p>
+        </div>
+        
+        <div class="hoard-display">
+            <div class="hoard-title">THE HOARD</div>
+            <div id="hoard-data" class="loading">Loading The Hoard...</div>
+        </div>
+        
+        <a href="https://discord.gg/R2WTXwbYah" class="discord-button" target="_blank">
+            Join The Fellowship
+        </a>
+        
+        <p class="quote">
+            "We measure wealth in weight, not promises."<br>
+            The Hoard grows. It does not shrink.
+        </p>
+    </div>
+
+    <script>
+        // CONFIGURATION - CHANGE THESE!
+        const SHEET_ID = '1-LJvYKvw0Pgt6vCA6aSFROMwsmY3JLraujWUSVbpAd8';
+        const METALS_API_KEY = 'YC3OLTQWVXD3QHLTZ6G3458LTZ6G3';
+        
+        async function fetchHoardData() {
+            try {
+                // Fetch hoard data from Google Sheet
+                const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The Hoard`;
+                const response = await fetch(sheetUrl);
+                const text = await response.text();
+                const json = JSON.parse(text.substr(47).slice(0, -2));
+                
+                // Get metal data
+                const rows = json.table.rows;
+                let metals = {};
+                
+                for (let i = 1; i < rows.length; i++) {
+                    const cells = rows[i].c;
+                    if (cells && cells[0] && cells[1]) {
+                        const metalName = cells[0].v;
+                        const weight = parseFloat(cells[1].v) || 0;
+                        
+                        if (metalName && weight > 0 && !metalName.includes('HOARD')) {
+                            metals[metalName] = weight;
+                        }
+                    }
+                }
+                
+                // Fetch current metal prices
+                const pricesUrl = `https://api.metals.dev/v1/latest?api_key=${METALS_API_KEY}&currency=USD&unit=toz`;
+                const pricesResponse = await fetch(pricesUrl);
+                const pricesData = await pricesResponse.json();
+                
+                const prices = {
+                    copper: pricesData.metals.copper,
+                    silver: pricesData.metals.silver,
+                    gold: pricesData.metals.gold,
+                    platinum: pricesData.metals.platinum
+                };
+                
+                // Display the data
+                displayHoard(metals, prices);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('hoard-data').innerHTML = 
+                    '<p style="color: #ff6b6b;">Error loading data. Please refresh.</p>';
+            }
+        }
+        
+        function displayHoard(metals, prices) {
+            let totalValue = 0;
+            let html = '';
+            
+            for (const [metal, weight] of Object.entries(metals)) {
+                const metalLower = metal.toLowerCase();
+                let value = 0;
+                let emoji = '';
+                let unit = 'oz';
+                
+                if (metalLower.includes('copper')) {
+                    value = weight * prices.copper * 0.999;
+                    emoji = '🟤';
+                } else if (metalLower.includes('silver')) {
+                    value = weight * prices.silver * 0.999;
+                    emoji = '⚪';
+                } else if (metalLower.includes('gold')) {
+                    value = weight * prices.gold * 0.999;
+                    emoji = '🟡';
+                } else if (metalLower.includes('platinum')) {
+                    value = weight * prices.platinum * 0.999;
+                    emoji = '⚫';
+                } else if (metalLower.includes('vulgar') || metalLower.includes('currency')) {
+                    value = weight;
+                    emoji = '💵';
+                    unit = 'USD';
+                }
+                
+                totalValue += value;
+                
+                html += `
+                    <div class="metal-row">
+                        <span class="metal-name">${emoji} ${metal}</span>
+                        <span class="metal-weight">${weight.toFixed(2)} ${unit}</span>
+                    </div>
+                `;
+            }
+            
+            html += `
+                <div class="total-value">
+                    💰 $${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                </div>
+            `;
+            
+            document.getElementById('hoard-data').innerHTML = html;
+        }
+        
+        // Load data immediately
+        fetchHoardData();
+        
+        // Refresh every 5 minutes
+        setInterval(fetchHoardData, 5 * 60 * 1000);
+    </script>
+</body>
+</html>
