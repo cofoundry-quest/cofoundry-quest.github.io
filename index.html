@@ -158,17 +158,32 @@
     </div>
 
     <script>
-        // CONFIGURATION - CHANGE THESE!
+        // CONFIGURATION
         const SHEET_ID = '1-LJvYKvw0Pgt6vCA6aSFROMwsmY3JLraujWUSVbpAd8';
         const METALS_API_KEY = 'YC3OLTQWVXD3QHLTZ6G3458LTZ6G3';
         
         async function fetchHoardData() {
             try {
+                console.log('Starting fetch...');
+                
                 // Fetch hoard data from Google Sheet
-                const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The Hoard`;
+                const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Hoard`;
+                console.log('Fetching from:', sheetUrl);
+                
                 const response = await fetch(sheetUrl);
                 const text = await response.text();
-                const json = JSON.parse(text.substr(47).slice(0, -2));
+                console.log('Got response, length:', text.length);
+                
+                // Parse the JSONP response - Google wraps it in a function call
+                const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
+                if (!jsonMatch) {
+                    // Try the old method as fallback
+                    const json = JSON.parse(text.substr(47).slice(0, -2));
+                } else {
+                    var json = JSON.parse(jsonMatch[1]);
+                }
+                
+                console.log('Parsed JSON successfully');
                 
                 // Get metal data
                 const rows = json.table.rows;
@@ -180,16 +195,22 @@
                         const metalName = cells[0].v;
                         const weight = parseFloat(cells[1].v) || 0;
                         
-                        if (metalName && weight > 0 && !metalName.includes('HOARD')) {
+                        if (metalName && weight > 0 && !metalName.toLowerCase().includes('hoard')) {
                             metals[metalName] = weight;
+                            console.log('Found metal:', metalName, weight);
                         }
                     }
                 }
                 
+                console.log('All metals:', metals);
+                
                 // Fetch current metal prices
                 const pricesUrl = `https://api.metals.dev/v1/latest?api_key=${METALS_API_KEY}&currency=USD&unit=toz`;
+                console.log('Fetching prices...');
+                
                 const pricesResponse = await fetch(pricesUrl);
                 const pricesData = await pricesResponse.json();
+                console.log('Got prices');
                 
                 const prices = {
                     copper: pricesData.metals.copper,
@@ -202,9 +223,11 @@
                 displayHoard(metals, prices);
                 
             } catch (error) {
-                console.error('Error:', error);
+                console.error('ERROR:', error);
+                console.error('Error message:', error.message);
+                console.error('Error stack:', error.stack);
                 document.getElementById('hoard-data').innerHTML = 
-                    '<p style="color: #ff6b6b;">Error loading data. Please refresh.</p>';
+                    `<p style="color: #ff6b6b;">Error: ${error.message}<br>Check console for details</p>`;
             }
         }
         
