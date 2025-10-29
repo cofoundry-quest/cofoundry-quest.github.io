@@ -160,9 +160,8 @@
     <script>
         // CONFIGURATION
         const SHEET_ID = '1-LJvYKvw0Pgt6vCA6aSFROMwsmY3JLraujWUSVbpAd8';
-        const METALS_API_KEY = 'YC3OLTQWVXD3QHLTZ6G3458LTZ6G3';
         
-  async function fetchHoardData() {
+async function fetchHoardData() {
     try {
         console.log('Starting fetch...');
         
@@ -183,59 +182,44 @@
         }
         
         console.log('Parsed JSON successfully');
-        console.log('Full JSON structure:', json);
-        console.log('Number of rows:', json.table.rows.length);
         
-        // Get metal data
+        // Get metal data from "The Hoard" sheet
         const rows = json.table.rows;
         let metals = {};
         
-        for (let i = 0; i < rows.length; i++) {
-            console.log(`Row ${i}:`, rows[i]);
-            
+        for (let i = 1; i < rows.length; i++) {
             const cells = rows[i].c;
-            console.log(`Row ${i} cells:`, cells);
-            
             if (cells && cells[0] && cells[1]) {
                 const metalName = cells[0].v;
-                const weight = cells[1].v;
+                const weight = parseFloat(cells[1].v) || 0;
                 
-                console.log(`Row ${i}: metalName="${metalName}", weight="${weight}", type=${typeof weight}`);
-                
-                const weightNum = parseFloat(weight);
-                console.log(`Row ${i}: parsed weight=${weightNum}`);
-                
-                if (metalName && weightNum > 0 && !metalName.toLowerCase().includes('hoard')) {
-                    metals[metalName] = weightNum;
-                    console.log('✅ Added metal:', metalName, weightNum);
-                } else {
-                    console.log(`❌ Skipped row ${i}:`, {
-                        hasName: !!metalName,
-                        weightPositive: weightNum > 0,
-                        notHoard: !metalName.toLowerCase().includes('hoard')
-                    });
+                if (metalName && weight > 0 && !metalName.toLowerCase().includes('hoard')) {
+                    metals[metalName] = weight;
+                    console.log('✅ Added metal:', metalName, weight);
                 }
-            } else {
-                console.log(`❌ Row ${i} missing cells or data`);
             }
         }
         
         console.log('All metals:', metals);
         
-        // Fetch current metal prices
-        const pricesUrl = `https://api.metals.dev/v1/latest?api_key=${METALS_API_KEY}&currency=USD&unit=toz`;
-        console.log('Fetching prices...');
+        // Fetch prices from "The Great Ledger" sheet (no API call!)
+        const ledgerUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Great%20Ledger&range=K2:K5`;
+        console.log('Fetching prices from ledger...');
         
-        const pricesResponse = await fetch(pricesUrl);
-        const pricesData = await pricesResponse.json();
-        console.log('Got prices');
+        const pricesResponse = await fetch(ledgerUrl);
+        const pricesText = await pricesResponse.text();
+        const pricesJsonMatch = pricesText.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
+        const pricesJson = pricesJsonMatch ? JSON.parse(pricesJsonMatch[1]) : JSON.parse(pricesText.substr(47).slice(0, -2));
         
+        const pricesRows = pricesJson.table.rows;
         const prices = {
-            copper: pricesData.metals.copper,
-            silver: pricesData.metals.silver,
-            gold: pricesData.metals.gold,
-            platinum: pricesData.metals.platinum
+            copper: parseFloat(pricesRows[0].c[0].v),
+            silver: parseFloat(pricesRows[1].c[0].v),
+            gold: parseFloat(pricesRows[2].c[0].v),
+            platinum: parseFloat(pricesRows[3].c[0].v)
         };
+        
+        console.log('Got prices from sheet:', prices);
         
         // Display the data
         displayHoard(metals, prices);
@@ -243,7 +227,6 @@
     } catch (error) {
         console.error('ERROR:', error);
         console.error('Error message:', error.message);
-        console.error('Error stack:', error.stack);
         document.getElementById('hoard-data').innerHTML = 
             `<p style="color: #ff6b6b;">Error: ${error.message}<br>Check console for details</p>`;
     }
