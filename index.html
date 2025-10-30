@@ -138,10 +138,10 @@
         <div class="intro">
             <p>Cofoundry is an invite only, dwarven-fantasy themed metal collecting co-op LARP game where we turn loot into treasure. 
             Join a Quest Party or adventure solo, collect treasure, earn Glory Points - 1 point per pound of copper or 10 per ounce of silver.
-            <p>We melt our copper and cast it into bars. Other metals get scrapped for “vulgar currency” to buy silver and gold. 
-            Liquidation can only occur with a 90% vote, almost certainly ensuring the hoard only ever accumulates.  If liquidation occurs, payout is based on player’s GP, ensuring payout based on participation.  
-            Beyond that, parts of the hoard can be sold for vulgar currency to expand your local Cofoundry Commonwealth’s Valorforge.
-            <p style="margin-top: 15px;">It’s a long-term experiment to see how much precious metal we can accumulate together. Part LARP, part dwarven investment club, part environmental scavenging project, 100% real metal. 
+            <p>We melt our copper and cast it into bars. Other metals get scrapped for "vulgar currency" to buy silver and gold. 
+            Liquidation can only occur with a 90% vote, almost certainly ensuring the hoard only ever accumulates.  If liquidation occurs, payout is based on player's GP, ensuring payout based on participation.  
+            Beyond that, parts of the hoard can be sold for vulgar currency to expand your local Cofoundry Commonwealth's Valorforge.
+            <p style="margin-top: 15px;">It's a long-term experiment to see how much precious metal we can accumulate together. Part LARP, part dwarven investment club, part environmental scavenging project, 100% real metal. 
             Want to quest with us? </p>
         </div>
         
@@ -154,9 +154,8 @@
             Join The Fellowship
         </a>
         
-        <p class="quote">
-            "We measure wealth in weight, not promises."<br>
-            The Hoard grows. It does not shrink.
+        <p class="quote" id="random-quote">
+            <!-- Quote will be inserted here by JavaScript -->
         </p>
     </div>
 
@@ -164,91 +163,127 @@
         // CONFIGURATION
         const SHEET_ID = '1-LJvYKvw0Pgt6vCA6aSFROMwsmY3JLraujWUSVbpAd8';
         
-      async function fetchHoardData() {
-    try {
-        console.log('Starting fetch...');
+        // ROTATING QUOTES
+        const FELLOWSHIP_QUOTES = [
+            "We measure wealth in weight, not promises.",
+            "The Hoard grows. It does not shrink.",
+            "Every pound of copper, every ounce of silver, is a permanent contribution to something greater than yourself.",
+            "What was stolen, we reclaim. What we forge, we keep.",
+            "Value is not what you can spend, but what you can hold.",
+            "We build what will outlast us all.",
+            "The fellowship forges together what no individual could achieve alone.",
+            "From scattered scrap, a mountain of metal.",
+            "What the surface world discards, the dwarves reclaim.",
+            "Each bar cast is a small victory against forgetting.",
+            "The vulgar count their promises. We count our ounces.",
+            "Wealth without weight is merely words.",
+            "The furnace knows no lies. Only metal, heat, and truth.",
+            "What hands have made, hands shall keep.",
+            "Glory is not given. It is earned, pound by pound.",
+            "The Hoard is the proof. The Fellowship is the power.",
+            "Scrap today, treasure tomorrow, legacy forever.",
+            "The mountain grows one stone at a time. The Hoard grows one quest at a time.",
+            "Hollow Lords discarded it. Dwarven labor reclaimed it. The Hoard holds it.",
+            "Value lies not in the promise of gold, but in the weight of it.",
+            "We forge the future by melting the past.",
+            "The bars remember every hand that forged them.",
+            "What we build together, no one can take alone.",
+            "Weight is truth. Purity is proof. The Hoard is both.",
+            "From the furnace, permanence. From the fellowship, power.",
+            "The ledger shows what dwarven labor creates. The vault holds what dwarven labor keeps.",
+            "Every bar is a vote of confidence in the collective.",
+            "What seems impossible to one becomes inevitable for many.",
+            "We hoard not from fear of scarcity, but from love of abundance.",
+            "The question is not if we can accumulate, but how much.",
+            "Metal does not forget. The Hoard does not diminish. The Fellowship does not surrender.",
+            "Every ounce is an argument. Every bar is a statement. The Hoard is the proof.",
+            "The dwarves dig deeply because the surface is hollow.",
+            "Cooperation beats competition when the goal is measured in centuries.",
+            "The vault secures metal. The fellowship secures meaning.",
+            "From scrap, through fire, into forever.",
+            "The Hoard is patient. The Fellowship is persistent. Victory is inevitable.",
+            "Each quest adds to the whole. Each dwarf strengthens the many."
+        ];
         
-        // Fetch hoard data from "The Hoard" sheet
-        const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Hoard`;
-        console.log('Fetching metals from The Hoard sheet...');
+        function getRandomQuote() {
+            return FELLOWSHIP_QUOTES[Math.floor(Math.random() * FELLOWSHIP_QUOTES.length)];
+        }
         
-        const response = await fetch(sheetUrl);
-        const text = await response.text();
+        function displayRandomQuote() {
+            const quote = getRandomQuote();
+            document.getElementById('random-quote').textContent = `"${quote}"`;
+        }
         
-        // Parse the JSONP response
-        const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
-        const json = jsonMatch ? JSON.parse(jsonMatch[1]) : JSON.parse(text.substr(47).slice(0, -2));
-        
-        console.log('Parsed metals data');
-        console.log('Full JSON:', json);
-        console.log('Number of rows:', json.table.rows.length);
-        
-        // Get metal data from "The Hoard" sheet
-        const rows = json.table.rows;
-        let metals = {};
-        
-        for (let i = 0; i < rows.length; i++) {
-            console.log(`--- Row ${i} ---`);
-            console.log('Raw row:', rows[i]);
-            
-            const cells = rows[i].c;
-            console.log('Cells:', cells);
-            
-            if (cells && cells[0] && cells[1]) {
-                const metalName = cells[0].v;
-                const weight = parseFloat(cells[1].v) || 0;
+        async function fetchHoardData() {
+            try {
+                console.log('Starting fetch...');
                 
-                console.log(`Row ${i}: name="${metalName}", weight=${weight}`);
-                console.log(`Checks: hasName=${!!metalName}, weightPositive=${weight > 0}, notHoard=${!metalName.toLowerCase().includes('hoard')}`);
+                // Fetch hoard data from "The Hoard" sheet
+                const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Hoard`;
+                console.log('Fetching metals from The Hoard sheet...');
                 
-                if (metalName && weight > 0 && !metalName.toLowerCase().includes('hoard')) {
-                    metals[metalName] = weight;
-                    console.log('✅ Added metal:', metalName, weight);
-                } else {
-                    console.log('❌ Skipped row ' + i);
+                const response = await fetch(sheetUrl);
+                const text = await response.text();
+                
+                // Parse the JSONP response
+                const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
+                const json = jsonMatch ? JSON.parse(jsonMatch[1]) : JSON.parse(text.substr(47).slice(0, -2));
+                
+                console.log('Parsed metals data');
+                
+                // Get metal data from "The Hoard" sheet
+                const rows = json.table.rows;
+                let metals = {};
+                
+                for (let i = 1; i < rows.length; i++) {
+                    const cells = rows[i].c;
+                    if (cells && cells[0] && cells[1]) {
+                        const metalName = cells[0].v;
+                        const weight = parseFloat(cells[1].v) || 0;
+                        
+                        if (metalName && weight > 0 && !metalName.toLowerCase().includes('hoard')) {
+                            metals[metalName] = weight;
+                        }
+                    }
                 }
-            } else {
-                console.log('❌ Row ' + i + ' missing data');
+                
+                console.log('All metals:', metals);
+                
+                // Fetch prices from "The Great Ledger" sheet K2:K5
+                const ledgerUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Great%20Ledger&range=K2:K5`;
+                console.log('Fetching prices from The Great Ledger...');
+                
+                const pricesResponse = await fetch(ledgerUrl);
+                const pricesText = await pricesResponse.text();
+                const pricesJsonMatch = pricesText.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
+                const pricesJson = pricesJsonMatch ? JSON.parse(pricesJsonMatch[1]) : JSON.parse(pricesText.substr(47).slice(0, -2));
+                
+                // Extract prices
+                const pricesRows = pricesJson.table.rows;
+                
+                if (!pricesRows || pricesRows.length < 4) {
+                    throw new Error('Not enough price data in sheet');
+                }
+                
+                const prices = {
+                    copper: parseFloat(pricesRows[0].c[0].v),
+                    silver: parseFloat(pricesRows[1].c[0].v),
+                    gold: parseFloat(pricesRows[2].c[0].v),
+                    platinum: parseFloat(pricesRows[3].c[0].v)
+                };
+                
+                console.log('Got prices from sheet:', prices);
+                
+                // Display the data
+                displayHoard(metals, prices);
+                
+            } catch (error) {
+                console.error('ERROR:', error);
+                console.error('Error message:', error.message);
+                document.getElementById('hoard-data').innerHTML = 
+                    `<p style="color: #ff6b6b;">Error loading data. Check console.</p>`;
             }
         }
-        
-        console.log('All metals:', metals);
-        
-        // Fetch prices from "The Great Ledger" sheet K2:K5
-        const ledgerUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Great%20Ledger&range=K2:K5`;
-        console.log('Fetching prices from The Great Ledger...');
-        
-        const pricesResponse = await fetch(ledgerUrl);
-        const pricesText = await pricesResponse.text();
-        const pricesJsonMatch = pricesText.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
-        const pricesJson = pricesJsonMatch ? JSON.parse(pricesJsonMatch[1]) : JSON.parse(pricesText.substr(47).slice(0, -2));
-        
-        // Extract prices
-        const pricesRows = pricesJson.table.rows;
-        
-        if (!pricesRows || pricesRows.length < 4) {
-            throw new Error('Not enough price data in sheet');
-        }
-        
-        const prices = {
-            copper: parseFloat(pricesRows[0].c[0].v),
-            silver: parseFloat(pricesRows[1].c[0].v),
-            gold: parseFloat(pricesRows[2].c[0].v),
-            platinum: parseFloat(pricesRows[3].c[0].v)
-        };
-        
-        console.log('Got prices from sheet:', prices);
-        
-        // Display the data
-        displayHoard(metals, prices);
-        
-    } catch (error) {
-        console.error('ERROR:', error);
-        console.error('Error message:', error.message);
-        document.getElementById('hoard-data').innerHTML = 
-            `<p style="color: #ff6b6b;">Error loading data. Check console.</p>`;
-    }
-}
         
         function displayHoard(metals, prices) {
             let totalValue = 0;
@@ -297,10 +332,13 @@
             document.getElementById('hoard-data').innerHTML = html;
         }
         
-        // Load data immediately
+        // Display random quote on page load
+        displayRandomQuote();
+        
+        // Load hoard data immediately
         fetchHoardData();
         
-        // Refresh every 5 minutes
+        // Refresh hoard data every 5 minutes
         setInterval(fetchHoardData, 5 * 60 * 1000);
     </script>
 </body>
