@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valorforge - The Cofoundry</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Uncial+Antiqua&display=swap');
         
         * {
             margin: 0;
@@ -14,9 +14,12 @@
         }
         
         body {
-            font-family: 'Cinzel', 'Georgia', serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2416 100%);
-            color: #d4af37;
+            font-family: 'MedievalSharp', 'Courier New', monospace;
+            background: #2b1810;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.3) 2px, rgba(0,0,0,.3) 4px),
+                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.3) 2px, rgba(0,0,0,.3) 4px);
+            color: #3d2817;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -26,239 +29,330 @@
         
         .container {
             max-width: 900px;
+            background: #c9b896;
+            background-image: 
+                radial-gradient(rgba(0,0,0,.1) 1px, transparent 1px),
+                radial-gradient(rgba(0,0,0,.1) 1px, transparent 1px);
+            background-size: 4px 4px;
+            background-position: 0 0, 2px 2px;
+            padding: 0;
+            border: 8px solid #3d2817;
+            box-shadow: 
+                0 0 0 2px #8b6f47,
+                inset 0 0 0 2px #8b6f47,
+                0 10px 30px rgba(0,0,0,0.7);
+        }
+        
+        .header {
+            background: linear-gradient(180deg, #8b6f47 0%, #5d4a36 100%);
+            border-bottom: 4px solid #3d2817;
+            padding: 30px 20px;
             text-align: center;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 60px 40px;
-            border-radius: 10px;
-            border: 2px solid #d4af37;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            box-shadow: inset 0 -4px 8px rgba(0,0,0,0.3);
         }
         
         h1 {
-            font-size: 3em;
+            font-family: 'Uncial Antiqua', cursive;
+            font-size: 2.5em;
+            color: #ffd700;
+            text-shadow: 
+                3px 3px 0 #3d2817,
+                -1px -1px 0 #3d2817,
+                1px -1px 0 #3d2817,
+                -1px 1px 0 #3d2817,
+                1px 1px 0 #3d2817,
+                4px 4px 8px rgba(0,0,0,0.8);
+            letter-spacing: 3px;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-            letter-spacing: 2px;
         }
         
         .subtitle {
-            font-size: 1.2em;
-            color: #b8960f;
-            margin-bottom: 30px;
+            font-size: 1.1em;
+            color: #d4af37;
             font-style: italic;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .content-area {
+            padding: 30px;
         }
         
         .intro {
-            font-size: 1.1em;
-            line-height: 1.8;
-            margin-bottom: 40px;
-            color: #e6d5a0;
-        }
-        
-        .hoard-display {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 30px;
-            border-radius: 8px;
-            margin: 40px 0;
-            border: 1px solid #8b7355;
-        }
-        
-        .hoard-title {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            color: #ffd700;
-        }
-        
-        .metal-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 15px 20px;
-            margin: 10px 0;
-            background: rgba(139, 115, 85, 0.2);
-            border-radius: 5px;
-            font-size: 1.1em;
-        }
-        
-        .metal-name {
-            font-weight: bold;
-        }
-        
-        .metal-weight {
-            color: #fff;
-        }
-        
-        .total-value {
-            font-size: 1.8em;
-            margin-top: 30px;
+            background: #e8dcc4;
+            border: 4px solid #3d2817;
+            border-radius: 0;
             padding: 20px;
-            background: rgba(212, 175, 55, 0.1);
-            border-radius: 5px;
-            color: #ffd700;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.7;
+            box-shadow: 
+                inset 2px 2px 4px rgba(0,0,0,0.2),
+                2px 2px 0 #8b6f47;
         }
         
-        /* LEADERBOARD STYLES */
-        .leaderboard-display {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 30px;
-            border-radius: 8px;
-            margin: 40px 0;
-            border: 1px solid #8b7355;
+        .intro p {
+            margin-bottom: 15px;
         }
         
-        .leaderboard-title {
-            font-size: 1.5em;
+        .intro p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .panel {
+            background: #e8dcc4;
+            border: 4px solid #3d2817;
+            padding: 20px;
+            margin: 30px 0;
+            box-shadow: 
+                inset 2px 2px 4px rgba(0,0,0,0.2),
+                4px 4px 0 #8b6f47;
+            position: relative;
+        }
+        
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            height: 8px;
+            background: linear-gradient(90deg, #8b6f47 0%, #5d4a36 50%, #8b6f47 100%);
+        }
+        
+        .panel-title {
+            font-family: 'Uncial Antiqua', cursive;
+            font-size: 1.8em;
+            color: #3d2817;
+            text-align: center;
             margin-bottom: 20px;
-            color: #ffd700;
+            text-shadow: 2px 2px 0 #d4af37;
+            letter-spacing: 2px;
         }
         
-        .dwarf-row {
+        .metal-row, .dwarf-row {
+            background: #d4c5a9;
+            border: 3px solid #3d2817;
+            padding: 12px 15px;
+            margin: 8px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            margin: 10px 0;
-            background: rgba(139, 115, 85, 0.2);
-            border-radius: 5px;
-            font-size: 1.1em;
+            box-shadow: 2px 2px 0 #8b6f47;
+            font-size: 1em;
+        }
+        
+        .metal-row:hover, .dwarf-row:hover {
+            background: #c9b896;
         }
         
         .dwarf-row.top-three {
-            background: rgba(212, 175, 55, 0.3);
-            border: 1px solid #d4af37;
+            background: #ffd700;
+            border-color: #8b6f47;
+            box-shadow: 
+                2px 2px 0 #8b6f47,
+                0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        .metal-name, .dwarf-name {
+            font-weight: bold;
+            flex: 1;
+            text-align: left;
+        }
+        
+        .metal-weight, .dwarf-gp {
+            color: #8b4513;
+            font-weight: bold;
         }
         
         .dwarf-rank {
             font-weight: bold;
             min-width: 50px;
             text-align: left;
+            font-size: 1.2em;
         }
         
-        .dwarf-name {
-            flex: 1;
-            text-align: left;
-            padding: 0 20px;
-        }
-        
-        .dwarf-gp {
-            color: #ffd700;
+        .total-value {
+            background: linear-gradient(180deg, #ffd700 0%, #daa520 100%);
+            border: 4px solid #3d2817;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.8em;
             font-weight: bold;
+            color: #3d2817;
+            text-shadow: 1px 1px 0 #fff;
+            box-shadow: 
+                inset 0 2px 4px rgba(255,255,255,0.5),
+                2px 2px 0 #8b6f47;
         }
         
         .leaderboard-stats {
             margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #8b7355;
-            color: #b8960f;
+            padding-top: 15px;
+            border-top: 3px solid #8b6f47;
+            text-align: center;
+            color: #5d4a36;
             font-size: 0.9em;
         }
         
-        /* PAGINATION STYLES */
         .pagination-controls {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
             margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #8b7355;
+            padding-top: 15px;
+            border-top: 3px solid #8b6f47;
         }
         
         .pagination-button {
-            background: rgba(212, 175, 55, 0.2);
-            border: 1px solid #d4af37;
-            color: #d4af37;
+            background: linear-gradient(180deg, #8b6f47 0%, #5d4a36 100%);
+            border: 3px solid #3d2817;
+            color: #ffd700;
             padding: 10px 20px;
-            border-radius: 5px;
             cursor: pointer;
-            font-family: 'Cinzel', 'Georgia', serif;
+            font-family: 'MedievalSharp', 'Courier New', monospace;
             font-size: 1em;
-            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 2px 2px 0 #3d2817;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         
         .pagination-button:hover:not(:disabled) {
-            background: rgba(212, 175, 55, 0.4);
-            transform: translateY(-2px);
+            background: linear-gradient(180deg, #a0805a 0%, #6b5943 100%);
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0 #3d2817;
+        }
+        
+        .pagination-button:active:not(:disabled) {
+            transform: translate(2px, 2px);
+            box-shadow: none;
         }
         
         .pagination-button:disabled {
-            opacity: 0.3;
+            opacity: 0.4;
             cursor: not-allowed;
         }
         
         .pagination-info {
-            color: #b8960f;
-            font-size: 0.9em;
+            color: #5d4a36;
+            font-weight: bold;
         }
         
         .discord-button {
             display: inline-block;
-            margin-top: 40px;
-            padding: 20px 50px;
-            background: #5865f2;
+            margin: 30px auto;
+            padding: 15px 40px;
+            background: linear-gradient(180deg, #7289da 0%, #5865f2 100%);
             color: white;
             text-decoration: none;
             font-size: 1.3em;
-            border-radius: 8px;
-            transition: all 0.3s;
             font-weight: bold;
-            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4);
+            border: 4px solid #3d2817;
+            cursor: pointer;
+            box-shadow: 4px 4px 0 #3d2817;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            transition: all 0.1s;
         }
         
         .discord-button:hover {
-            background: #4752c4;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.6);
+            background: linear-gradient(180deg, #8b9fe8 0%, #6b7bff 100%);
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #3d2817;
+        }
+        
+        .discord-button:active {
+            transform: translate(4px, 4px);
+            box-shadow: none;
+        }
+        
+        .button-container {
+            text-align: center;
         }
         
         .quote {
-            margin-top: 40px;
+            background: #8b6f47;
+            border: 4px solid #3d2817;
+            padding: 20px;
+            margin-top: 30px;
             font-style: italic;
-            color: #b8960f;
+            color: #ffd700;
+            text-align: center;
             font-size: 1em;
             line-height: 1.6;
+            box-shadow: 
+                inset 2px 2px 4px rgba(0,0,0,0.3),
+                2px 2px 0 #5d4a36;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         
         .loading {
             font-size: 1.2em;
-            color: #b8960f;
+            color: #8b6f47;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        /* Retro scrollbar */
+        ::-webkit-scrollbar {
+            width: 16px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #8b6f47;
+            border: 2px solid #3d2817;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #5d4a36;
+            border: 2px solid #3d2817;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4a3829;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>⚒️ COFOUNDRY ⚒️</h1>
-        <p class="subtitle">Home of the Valorforge</p>
+        <div class="header">
+            <h1>⚒ COFOUNDRY ⚒</h1>
+            <p class="subtitle">Home of the Valorforge</p>
+        </div>
         
-        <div class="intro">
-            <p>Cofoundry is an invite only, dwarven-fantasy themed metal collecting co-op LARP game where we turn loot into treasure. 
-            Join a Quest Party or adventure solo, collect treasure, earn Glory Points - 1 point per pound of copper or 10 per ounce of silver.</p>
+        <div class="content-area">
+            <div class="intro">
+                <p>Cofoundry is an invite only, dwarven-fantasy themed metal collecting co-op LARP game where we turn loot into treasure. 
+                Join a Quest Party or adventure solo, collect treasure, earn Glory Points - 1 point per pound of copper or 10 per ounce of silver.</p>
+                
+                <p>We melt our copper and cast it into bars. Other metals get scrapped for "vulgar currency" to buy silver and gold. 
+                Liquidation can only occur with a 90% vote, almost certainly ensuring the hoard only ever accumulates. If liquidation occurs, payout is based on player's GP, ensuring payout based on participation. 
+                Beyond that, parts of the hoard can be sold for vulgar currency to expand your local Cofoundry Commonwealth's Valorforge.</p>
+                
+                <p>It's a long-term experiment to see how much precious metal we can accumulate together. Part LARP, part dwarven investment club, part environmental scavenging project, 100% real metal. 
+                Want to quest with us?</p>
+            </div>
             
-            <p style="margin-top: 15px;">We melt our copper and cast it into bars. Other metals get scrapped for "vulgar currency" to buy silver and gold. 
-            Liquidation can only occur with a 90% vote, almost certainly ensuring the hoard only ever accumulates. If liquidation occurs, payout is based on player's GP, ensuring payout based on participation. 
-            Beyond that, parts of the hoard can be sold for vulgar currency to expand your local Cofoundry Commonwealth's Valorforge.</p>
+            <div class="panel">
+                <div class="panel-title">THE HOARD</div>
+                <div id="hoard-data" class="loading">Loading The Hoard...</div>
+            </div>
             
-            <p style="margin-top: 15px;">It's a long-term experiment to see how much precious metal we can accumulate together. Part LARP, part dwarven investment club, part environmental scavenging project, 100% real metal. 
-            Want to quest with us?</p>
+            <div class="panel">
+                <div class="panel-title">🏆 GLORY LEADERBOARD 🏆</div>
+                <div id="leaderboard-data" class="loading">Loading Leaderboard...</div>
+            </div>
+            
+            <div class="button-container">
+                <a href="https://discord.gg/R2WTXwbYah" class="discord-button" target="_blank">
+                    JOIN THE FELLOWSHIP
+                </a>
+            </div>
+            
+            <div class="quote" id="random-quote">
+                <!-- Quote will be inserted here by JavaScript -->
+            </div>
         </div>
-        
-        <div class="hoard-display">
-            <div class="hoard-title">THE HOARD</div>
-            <div id="hoard-data" class="loading">Loading The Hoard...</div>
-        </div>
-        
-        <!-- LEADERBOARD SECTION -->
-        <div class="leaderboard-display">
-            <div class="leaderboard-title">🏆 GLORY POINTS LEADERBOARD 🏆</div>
-            <div id="leaderboard-data" class="loading">Loading Leaderboard...</div>
-        </div>
-        
-        <a href="https://discord.gg/R2WTXwbYah" class="discord-button" target="_blank">
-            Join The Fellowship
-        </a>
-        
-        <p class="quote" id="random-quote">
-            <!-- Quote will be inserted here by JavaScript -->
-        </p>
     </div>
 
     <script>
@@ -323,8 +417,6 @@
         
         async function fetchHoardData() {
             try {
-                console.log('Starting hoard fetch...');
-                
                 const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Hoard`;
                 const response = await fetch(sheetUrl);
                 const text = await response.text();
@@ -424,8 +516,6 @@
         
         async function fetchLeaderboard() {
             try {
-                console.log('Starting leaderboard fetch...');
-                
                 const ledgerUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Great%20Ledger`;
                 const response = await fetch(ledgerUrl);
                 const text = await response.text();
@@ -453,8 +543,6 @@
                 
                 dwarves.sort((a, b) => b.gp - a.gp);
                 
-                console.log('Found dwarves:', dwarves);
-                
                 allDwarves = dwarves;
                 currentPage = 1;
                 displayLeaderboard();
@@ -470,14 +558,13 @@
             let html = '';
             
             if (allDwarves.length === 0) {
-                html = '<p style="color: #b8960f;">No Glory Points earned yet. Be the first!</p>';
+                html = '<p style="text-align: center; color: #8b6f47;">No Glory Points earned yet. Be the first!</p>';
             } else {
                 const totalPages = Math.ceil(allDwarves.length / DWARVES_PER_PAGE);
                 const startIndex = (currentPage - 1) * DWARVES_PER_PAGE;
                 const endIndex = Math.min(startIndex + DWARVES_PER_PAGE, allDwarves.length);
                 const pageDwarves = allDwarves.slice(startIndex, endIndex);
                 
-                // Display dwarves for current page
                 pageDwarves.forEach((dwarf, pageIndex) => {
                     const actualRank = startIndex + pageIndex + 1;
                     let rankDisplay = '';
@@ -505,36 +592,33 @@
                     `;
                 });
                 
-                // Add pagination controls if more than 10 dwarves
                 if (allDwarves.length > DWARVES_PER_PAGE) {
                     html += `
                         <div class="pagination-controls">
                             <button class="pagination-button" id="prev-button" ${currentPage === 1 ? 'disabled' : ''}>
-                                ← Previous
+                                ← PREV
                             </button>
                             <span class="pagination-info">
-                                Page ${currentPage} of ${totalPages} (${allDwarves.length} dwarves)
+                                Page ${currentPage} of ${totalPages}
                             </span>
                             <button class="pagination-button" id="next-button" ${currentPage === totalPages ? 'disabled' : ''}>
-                                Next →
+                                NEXT →
                             </button>
                         </div>
                     `;
                 }
                 
-                // Add stats
                 const totalGP = allDwarves.reduce((sum, d) => sum + d.gp, 0);
                 
                 html += `
                     <div class="leaderboard-stats">
-                        Total Dwarves: ${allDwarves.length} | Total Glory Earned: ${totalGP.toFixed(2)} GP
+                        Total Dwarves: ${allDwarves.length} | Total Glory: ${totalGP.toFixed(2)} GP
                     </div>
                 `;
             }
             
             document.getElementById('leaderboard-data').innerHTML = html;
             
-            // Add event listeners to pagination buttons if they exist
             if (allDwarves.length > DWARVES_PER_PAGE) {
                 document.getElementById('prev-button').addEventListener('click', () => {
                     if (currentPage > 1) {
@@ -553,14 +637,10 @@
             }
         }
         
-        // Display random quote on page load
         displayRandomQuote();
-        
-        // Load both hoard and leaderboard data immediately
         fetchHoardData();
         fetchLeaderboard();
         
-        // Refresh both every 5 minutes
         setInterval(() => {
             fetchHoardData();
             fetchLeaderboard();
