@@ -14,115 +14,130 @@
         }
         
         body {
-            font-family: 'MedievalSharp', 'Courier New', monospace;
-            background: #2b1810;
-            background-image: 
-                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.3) 2px, rgba(0,0,0,.3) 4px),
-                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.3) 2px, rgba(0,0,0,.3) 4px);
-            color: #3d2817;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        /* Castle wall borders */
-        body::before,
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            width: 120px;
-            background: 
-                linear-gradient(90deg, 
-                    #4a3829 0%, 
-                    #5d4a36 10%, 
-                    #5d4a36 90%, 
-                    #4a3829 100%
-                );
-            box-shadow: 
-                inset 0 0 50px rgba(0,0,0,0.5),
-                inset 10px 0 20px rgba(0,0,0,0.3),
-                inset -10px 0 20px rgba(0,0,0,0.3);
-            z-index: 1000;
-            pointer-events: none;
-        }
+    font-family: 'MedievalSharp', 'Courier New', monospace;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2416 100%);
+    color: #3d2817;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
 
-        body::before {
-            left: 0;
-            background-image: 
-                repeating-linear-gradient(
-                    0deg,
-                    transparent,
-                    transparent 35px,
-                    rgba(0,0,0,0.2) 35px,
-                    rgba(0,0,0,0.2) 38px
-                ),
-                repeating-linear-gradient(
-                    90deg,
-                    #5d4a36 0px,
-                    #4a3829 15px,
-                    #3d2817 30px,
-                    #4a3829 45px,
-                    #5d4a36 60px
-                ),
-                linear-gradient(90deg, 
-                    rgba(0,0,0,0.4) 0%, 
-                    transparent 20%, 
-                    transparent 80%, 
-                    rgba(0,0,0,0.2) 100%
-                );
-        }
+/* Castle wall borders - gray cobblestone */
+body::before,
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 120px;
+    background: 
+        radial-gradient(circle at 20% 30%, #6b6b6b 0%, #4a4a4a 50%, #3a3a3a 100%),
+        linear-gradient(180deg, #5a5a5a 0%, #4a4a4a 100%);
+    box-shadow: 
+        inset 0 0 60px rgba(0,0,0,0.6),
+        inset 15px 0 30px rgba(0,0,0,0.4),
+        inset -15px 0 30px rgba(0,0,0,0.4);
+    z-index: 1000;
+    pointer-events: none;
+}
 
-        body::after {
-            right: 0;
-            background-image: 
-                repeating-linear-gradient(
-                    0deg,
-                    transparent,
-                    transparent 35px,
-                    rgba(0,0,0,0.2) 35px,
-                    rgba(0,0,0,0.2) 38px
-                ),
-                repeating-linear-gradient(
-                    90deg,
-                    #5d4a36 0px,
-                    #4a3829 15px,
-                    #3d2817 30px,
-                    #4a3829 45px,
-                    #5d4a36 60px
-                ),
-                linear-gradient(90deg, 
-                    rgba(0,0,0,0.2) 0%, 
-                    transparent 20%, 
-                    transparent 80%, 
-                    rgba(0,0,0,0.4) 100%
-                );
-        }
+body::before {
+    left: 0;
+    background-image: 
+        /* Mortar lines - horizontal */
+        repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent 45px,
+            rgba(30,30,30,0.6) 45px,
+            rgba(30,30,30,0.6) 50px
+        ),
+        /* Stone texture variation */
+        repeating-linear-gradient(
+            0deg,
+            #5a5a5a 0px,
+            #4a4a4a 22px,
+            #6b6b6b 23px,
+            #5a5a5a 45px
+        ),
+        /* Vertical variation for individual stones */
+        repeating-linear-gradient(
+            90deg,
+            #5a5a5a 0px,
+            #4a4a4a 30px,
+            #6b6b6b 60px,
+            #5a5a5a 90px,
+            #4a4a4a 120px
+        ),
+        /* Depth and shadow */
+        linear-gradient(90deg, 
+            rgba(0,0,0,0.5) 0%, 
+            transparent 15%, 
+            transparent 85%, 
+            rgba(0,0,0,0.3) 100%
+        );
+}
 
-        /* Responsive: hide on smaller screens */
-        @media (max-width: 1200px) {
-            body::before,
-            body::after {
-                width: 80px;
-            }
-        }
+body::after {
+    right: 0;
+    background-image: 
+        /* Mortar lines - horizontal */
+        repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent 45px,
+            rgba(30,30,30,0.6) 45px,
+            rgba(30,30,30,0.6) 50px
+        ),
+        /* Stone texture variation */
+        repeating-linear-gradient(
+            0deg,
+            #5a5a5a 0px,
+            #4a4a4a 22px,
+            #6b6b6b 23px,
+            #5a5a5a 45px
+        ),
+        /* Vertical variation for individual stones */
+        repeating-linear-gradient(
+            90deg,
+            #5a5a5a 0px,
+            #4a4a4a 30px,
+            #6b6b6b 60px,
+            #5a5a5a 90px,
+            #4a4a4a 120px
+        ),
+        /* Depth and shadow */
+        linear-gradient(90deg, 
+            rgba(0,0,0,0.3) 0%, 
+            transparent 15%, 
+            transparent 85%, 
+            rgba(0,0,0,0.5) 100%
+        );
+}
 
-        @media (max-width: 900px) {
-            body::before,
-            body::after {
-                width: 40px;
-            }
-        }
+/* Responsive: hide on smaller screens */
+@media (max-width: 1200px) {
+    body::before,
+    body::after {
+        width: 80px;
+    }
+}
 
-        @media (max-width: 600px) {
-            body::before,
-            body::after {
-                display: none;
-            }
-        }
+@media (max-width: 900px) {
+    body::before,
+    body::after {
+        width: 40px;
+    }
+}
+
+@media (max-width: 600px) {
+    body::before,
+    body::after {
+        display: none;
+    }
+}
         
         .container {
             max-width: 900px;
