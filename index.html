@@ -152,6 +152,44 @@
             font-size: 0.9em;
         }
         
+        /* PAGINATION STYLES */
+        .pagination-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #8b7355;
+        }
+        
+        .pagination-button {
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Cinzel', 'Georgia', serif;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        .pagination-button:hover:not(:disabled) {
+            background: rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .pagination-button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        
+        .pagination-info {
+            color: #b8960f;
+            font-size: 0.9em;
+        }
+        
         .discord-button {
             display: inline-block;
             margin-top: 40px;
@@ -208,7 +246,7 @@
             <div id="hoard-data" class="loading">Loading The Hoard...</div>
         </div>
         
-        <!-- NEW: LEADERBOARD SECTION -->
+        <!-- LEADERBOARD SECTION -->
         <div class="leaderboard-display">
             <div class="leaderboard-title">🏆 GLORY POINTS LEADERBOARD 🏆</div>
             <div id="leaderboard-data" class="loading">Loading Leaderboard...</div>
@@ -226,6 +264,11 @@
     <script>
         // CONFIGURATION
         const SHEET_ID = '1-LJvYKvw0Pgt6vCA6aSFROMwsmY3JLraujWUSVbpAd8';
+        const DWARVES_PER_PAGE = 10;
+        
+        // Global state for leaderboard
+        let allDwarves = [];
+        let currentPage = 1;
         
         // ROTATING QUOTES
         const FELLOWSHIP_QUOTES = [
@@ -282,17 +325,13 @@
             try {
                 console.log('Starting hoard fetch...');
                 
-                // Fetch hoard data from "The Hoard" sheet
                 const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Hoard`;
-                
                 const response = await fetch(sheetUrl);
                 const text = await response.text();
                 
-                // Parse the JSONP response
                 const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
                 const json = jsonMatch ? JSON.parse(jsonMatch[1]) : JSON.parse(text.substr(47).slice(0, -2));
                 
-                // Get metal data from "The Hoard" sheet
                 const rows = json.table.rows;
                 let metals = {};
                 
@@ -308,15 +347,12 @@
                     }
                 }
                 
-                // Fetch prices from "The Great Ledger" sheet K2:K5
                 const ledgerUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Great%20Ledger&range=K2:K5`;
-                
                 const pricesResponse = await fetch(ledgerUrl);
                 const pricesText = await pricesResponse.text();
                 const pricesJsonMatch = pricesText.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
                 const pricesJson = pricesJsonMatch ? JSON.parse(pricesJsonMatch[1]) : JSON.parse(pricesText.substr(47).slice(0, -2));
                 
-                // Extract prices
                 const pricesRows = pricesJson.table.rows;
                 
                 if (!pricesRows || pricesRows.length < 4) {
@@ -330,7 +366,6 @@
                     platinum: parseFloat(pricesRows[3].c[0].v)
                 };
                 
-                // Display the data
                 displayHoard(metals, prices);
                 
             } catch (error) {
@@ -387,32 +422,26 @@
             document.getElementById('hoard-data').innerHTML = html;
         }
         
-        // NEW: FETCH LEADERBOARD DATA
         async function fetchLeaderboard() {
             try {
                 console.log('Starting leaderboard fetch...');
                 
-                // Fetch from "The Great Ledger" sheet - columns B (dwarf name) and H (glory points)
                 const ledgerUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Great%20Ledger`;
-                
                 const response = await fetch(ledgerUrl);
                 const text = await response.text();
                 
-                // Parse the JSONP response
                 const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
                 const json = jsonMatch ? JSON.parse(jsonMatch[1]) : JSON.parse(text.substr(47).slice(0, -2));
                 
                 const rows = json.table.rows;
                 let dwarves = [];
                 
-                // Extract dwarf names (column B = index 1) and GP (column H = index 7)
                 for (let i = 1; i < rows.length; i++) {
                     const cells = rows[i].c;
                     if (cells && cells[1] && cells[7]) {
                         const dwarfName = cells[1].v;
                         const gloryPoints = parseFloat(cells[7].v) || 0;
                         
-                        // Skip if name contains "HOARD" or GP is 0
                         if (dwarfName && !dwarfName.toLowerCase().includes('hoard') && gloryPoints > 0) {
                             dwarves.push({
                                 name: dwarfName,
@@ -422,13 +451,13 @@
                     }
                 }
                 
-                // Sort by GP (highest first)
                 dwarves.sort((a, b) => b.gp - a.gp);
                 
                 console.log('Found dwarves:', dwarves);
                 
-                // Display the leaderboard
-                displayLeaderboard(dwarves);
+                allDwarves = dwarves;
+                currentPage = 1;
+                displayLeaderboard();
                 
             } catch (error) {
                 console.error('Leaderboard ERROR:', error);
@@ -437,29 +466,34 @@
             }
         }
         
-        function displayLeaderboard(dwarves) {
+        function displayLeaderboard() {
             let html = '';
             
-            if (dwarves.length === 0) {
+            if (allDwarves.length === 0) {
                 html = '<p style="color: #b8960f;">No Glory Points earned yet. Be the first!</p>';
             } else {
-                // Display each dwarf
-                dwarves.forEach((dwarf, index) => {
-                    const rank = index + 1;
+                const totalPages = Math.ceil(allDwarves.length / DWARVES_PER_PAGE);
+                const startIndex = (currentPage - 1) * DWARVES_PER_PAGE;
+                const endIndex = Math.min(startIndex + DWARVES_PER_PAGE, allDwarves.length);
+                const pageDwarves = allDwarves.slice(startIndex, endIndex);
+                
+                // Display dwarves for current page
+                pageDwarves.forEach((dwarf, pageIndex) => {
+                    const actualRank = startIndex + pageIndex + 1;
                     let rankDisplay = '';
                     let topThreeClass = '';
                     
-                    if (rank === 1) {
+                    if (actualRank === 1) {
                         rankDisplay = '🥇';
                         topThreeClass = 'top-three';
-                    } else if (rank === 2) {
+                    } else if (actualRank === 2) {
                         rankDisplay = '🥈';
                         topThreeClass = 'top-three';
-                    } else if (rank === 3) {
+                    } else if (actualRank === 3) {
                         rankDisplay = '🥉';
                         topThreeClass = 'top-three';
                     } else {
-                        rankDisplay = `${rank}.`;
+                        rankDisplay = `${actualRank}.`;
                     }
                     
                     html += `
@@ -471,18 +505,52 @@
                     `;
                 });
                 
+                // Add pagination controls if more than 10 dwarves
+                if (allDwarves.length > DWARVES_PER_PAGE) {
+                    html += `
+                        <div class="pagination-controls">
+                            <button class="pagination-button" id="prev-button" ${currentPage === 1 ? 'disabled' : ''}>
+                                ← Previous
+                            </button>
+                            <span class="pagination-info">
+                                Page ${currentPage} of ${totalPages} (${allDwarves.length} dwarves)
+                            </span>
+                            <button class="pagination-button" id="next-button" ${currentPage === totalPages ? 'disabled' : ''}>
+                                Next →
+                            </button>
+                        </div>
+                    `;
+                }
+                
                 // Add stats
-                const totalDwarves = dwarves.length;
-                const totalGP = dwarves.reduce((sum, d) => sum + d.gp, 0);
+                const totalGP = allDwarves.reduce((sum, d) => sum + d.gp, 0);
                 
                 html += `
                     <div class="leaderboard-stats">
-                        Total Dwarves: ${totalDwarves} | Total Glory Earned: ${totalGP.toFixed(2)} GP
+                        Total Dwarves: ${allDwarves.length} | Total Glory Earned: ${totalGP.toFixed(2)} GP
                     </div>
                 `;
             }
             
             document.getElementById('leaderboard-data').innerHTML = html;
+            
+            // Add event listeners to pagination buttons if they exist
+            if (allDwarves.length > DWARVES_PER_PAGE) {
+                document.getElementById('prev-button').addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        displayLeaderboard();
+                    }
+                });
+                
+                document.getElementById('next-button').addEventListener('click', () => {
+                    const totalPages = Math.ceil(allDwarves.length / DWARVES_PER_PAGE);
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        displayLeaderboard();
+                    }
+                });
+            }
         }
         
         // Display random quote on page load
