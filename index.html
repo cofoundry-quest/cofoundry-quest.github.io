@@ -25,6 +25,7 @@
 }
 
 /* Castle wall borders - gray cobblestone */
+/* Castle wall borders - realistic cobblestone */
 body::before,
 body::after {
     content: '';
@@ -32,13 +33,11 @@ body::after {
     top: 0;
     bottom: 0;
     width: 120px;
-    background: 
-        radial-gradient(circle at 20% 30%, #6b6b6b 0%, #4a4a4a 50%, #3a3a3a 100%),
-        linear-gradient(180deg, #5a5a5a 0%, #4a4a4a 100%);
+    background: #4a4a4a;
     box-shadow: 
-        inset 0 0 60px rgba(0,0,0,0.6),
-        inset 15px 0 30px rgba(0,0,0,0.4),
-        inset -15px 0 30px rgba(0,0,0,0.4);
+        inset 0 0 80px rgba(0,0,0,0.7),
+        inset 20px 0 40px rgba(0,0,0,0.5),
+        inset -20px 0 40px rgba(0,0,0,0.5);
     z-index: 1000;
     pointer-events: none;
 }
@@ -46,75 +45,147 @@ body::after {
 body::before {
     left: 0;
     background-image: 
-        /* Mortar lines - horizontal */
+        /* Individual stone blocks with random sizes */
+        radial-gradient(ellipse 25px 30px at 30% 15%, #6b6b6b 45%, transparent 50%),
+        radial-gradient(ellipse 30px 25px at 70% 10%, #5a5a5a 45%, transparent 50%),
+        radial-gradient(ellipse 28px 28px at 50% 40%, #7a7a7a 45%, transparent 50%),
+        radial-gradient(ellipse 32px 24px at 25% 35%, #555555 45%, transparent 50%),
+        radial-gradient(ellipse 26px 32px at 75% 45%, #656565 45%, transparent 50%),
+        radial-gradient(ellipse 30px 26px at 40% 70%, #6a6a6a 45%, transparent 50%),
+        radial-gradient(ellipse 24px 28px at 20% 75%, #5f5f5f 45%, transparent 50%),
+        radial-gradient(ellipse 28px 30px at 80% 80%, #707070 45%, transparent 50%),
+        radial-gradient(ellipse 26px 26px at 55% 95%, #606060 45%, transparent 50%),
+        /* Mortar/dark gaps between stones */
         repeating-linear-gradient(
             0deg,
             transparent 0px,
-            transparent 45px,
-            rgba(30,30,30,0.6) 45px,
-            rgba(30,30,30,0.6) 50px
+            transparent 24px,
+            rgba(20,20,20,0.8) 24px,
+            rgba(20,20,20,0.8) 28px
         ),
-        /* Stone texture variation */
-        repeating-linear-gradient(
-            0deg,
-            #5a5a5a 0px,
-            #4a4a4a 22px,
-            #6b6b6b 23px,
-            #5a5a5a 45px
-        ),
-        /* Vertical variation for individual stones */
         repeating-linear-gradient(
             90deg,
-            #5a5a5a 0px,
-            #4a4a4a 30px,
-            #6b6b6b 60px,
-            #5a5a5a 90px,
-            #4a4a4a 120px
+            transparent 0px,
+            transparent 28px,
+            rgba(20,20,20,0.7) 28px,
+            rgba(20,20,20,0.7) 32px
         ),
-        /* Depth and shadow */
+        /* Base stone texture */
+        repeating-linear-gradient(
+            45deg,
+            #5a5a5a 0px,
+            #4a4a4a 2px,
+            #6b6b6b 4px,
+            #5a5a5a 6px
+        ),
+        /* Depth gradient */
         linear-gradient(90deg, 
-            rgba(0,0,0,0.5) 0%, 
-            transparent 15%, 
-            transparent 85%, 
-            rgba(0,0,0,0.3) 100%
+            rgba(0,0,0,0.6) 0%, 
+            transparent 20%, 
+            transparent 80%, 
+            rgba(0,0,0,0.4) 100%
         );
+    background-size: 
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        6px 6px,
+        100% 100%;
+    background-position: 
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0;
 }
 
 body::after {
     right: 0;
     background-image: 
-        /* Mortar lines - horizontal */
+        /* Individual stone blocks with random sizes - slightly offset */
+        radial-gradient(ellipse 28px 26px at 35% 12%, #6b6b6b 45%, transparent 50%),
+        radial-gradient(ellipse 26px 30px at 65% 18%, #5a5a5a 45%, transparent 50%),
+        radial-gradient(ellipse 30px 25px at 45% 42%, #7a7a7a 45%, transparent 50%),
+        radial-gradient(ellipse 27px 29px at 80% 38%, #555555 45%, transparent 50%),
+        radial-gradient(ellipse 29px 27px at 20% 48%, #656565 45%, transparent 50%),
+        radial-gradient(ellipse 25px 31px at 60% 72%, #6a6a6a 45%, transparent 50%),
+        radial-gradient(ellipse 31px 24px at 25% 78%, #5f5f5f 45%, transparent 50%),
+        radial-gradient(ellipse 26px 28px at 75% 85%, #707070 45%, transparent 50%),
+        radial-gradient(ellipse 28px 29px at 50% 98%, #606060 45%, transparent 50%),
+        /* Mortar/dark gaps between stones */
         repeating-linear-gradient(
             0deg,
             transparent 0px,
-            transparent 45px,
-            rgba(30,30,30,0.6) 45px,
-            rgba(30,30,30,0.6) 50px
+            transparent 24px,
+            rgba(20,20,20,0.8) 24px,
+            rgba(20,20,20,0.8) 28px
         ),
-        /* Stone texture variation */
-        repeating-linear-gradient(
-            0deg,
-            #5a5a5a 0px,
-            #4a4a4a 22px,
-            #6b6b6b 23px,
-            #5a5a5a 45px
-        ),
-        /* Vertical variation for individual stones */
         repeating-linear-gradient(
             90deg,
-            #5a5a5a 0px,
-            #4a4a4a 30px,
-            #6b6b6b 60px,
-            #5a5a5a 90px,
-            #4a4a4a 120px
+            transparent 0px,
+            transparent 28px,
+            rgba(20,20,20,0.7) 28px,
+            rgba(20,20,20,0.7) 32px
         ),
-        /* Depth and shadow */
+        /* Base stone texture */
+        repeating-linear-gradient(
+            45deg,
+            #5a5a5a 0px,
+            #4a4a4a 2px,
+            #6b6b6b 4px,
+            #5a5a5a 6px
+        ),
+        /* Depth gradient */
         linear-gradient(90deg, 
-            rgba(0,0,0,0.3) 0%, 
-            transparent 15%, 
-            transparent 85%, 
-            rgba(0,0,0,0.5) 100%
+            rgba(0,0,0,0.4) 0%, 
+            transparent 20%, 
+            transparent 80%, 
+            rgba(0,0,0,0.6) 100%
         );
+    background-size: 
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        120px 100px,
+        6px 6px,
+        100% 100%;
+    background-position: 
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0;
 }
 
 /* Responsive: hide on smaller screens */
