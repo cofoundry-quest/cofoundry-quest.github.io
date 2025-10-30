@@ -13,89 +13,136 @@
             box-sizing: border-box;
         }
         
-       /* Shadow gradient behind pillars */
-body {
-    position: relative;
-}
+        body {
+            font-family: 'MedievalSharp', 'Courier New', monospace;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2416 100%);
+            color: #3d2817;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+        
+        /* Castle wall borders - cobblestone texture */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 120px;
+            background-image: url('images/cobblestone.png');
+            background-size: 120px auto;
+            background-repeat: repeat-y;
+            background-position: center;
+            box-shadow: 
+                inset 0 0 80px rgba(0,0,0,0.5),
+                inset 20px 0 40px rgba(0,0,0,0.4),
+                inset -20px 0 40px rgba(0,0,0,0.4);
+            z-index: 1000;
+            pointer-events: none;
+            filter: brightness(0.8) contrast(1.1);
+        }
 
-body::before,
-body::after {
-    /* existing cobblestone styles stay the same */
-}
+        body::before {
+            left: 0;
+        }
 
-/* Add shadow layers BEHIND the pillars */
-.shadow-gradient-left,
-.shadow-gradient-right {
-    content: '';
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    width: 400px;
-    pointer-events: none;
-    z-index: 999; /* Just below the pillars (which are z-index: 1000) */
-}
+        body::after {
+            right: 0;
+        }
 
-.shadow-gradient-left {
-    left: 0;
-    background: linear-gradient(90deg, 
-        rgba(0, 0, 0, 0.8) 0%,
-        rgba(0, 0, 0, 0.5) 120px,
-        rgba(0, 0, 0, 0.3) 200px,
-        rgba(0, 0, 0, 0.1) 300px,
-        transparent 400px
-    );
-}
+        /* Shadow gradient behind pillars */
+        .shadow-gradient-left,
+        .shadow-gradient-right {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 400px;
+            pointer-events: none;
+            z-index: 999;
+        }
 
-.shadow-gradient-right {
-    right: 0;
-    background: linear-gradient(270deg, 
-        rgba(0, 0, 0, 0.8) 0%,
-        rgba(0, 0, 0, 0.5) 120px,
-        rgba(0, 0, 0, 0.3) 200px,
-        rgba(0, 0, 0, 0.1) 300px,
-        transparent 400px
-    );
-}
+        .shadow-gradient-left {
+            left: 0;
+            background: linear-gradient(90deg, 
+                rgba(0, 0, 0, 0.8) 0%,
+                rgba(0, 0, 0, 0.5) 120px,
+                rgba(0, 0, 0, 0.3) 200px,
+                rgba(0, 0, 0, 0.1) 300px,
+                transparent 400px
+            );
+        }
 
-/* Responsive */
-@media (max-width: 1200px) {
-    .shadow-gradient-left,
-    .shadow-gradient-right {
-        width: 300px;
-    }
-    
-    .shadow-gradient-left {
-        background: linear-gradient(90deg, 
-            rgba(0, 0, 0, 0.8) 0%,
-            rgba(0, 0, 0, 0.4) 80px,
-            rgba(0, 0, 0, 0.2) 150px,
-            transparent 300px
-        );
-    }
-    
-    .shadow-gradient-right {
-        background: linear-gradient(270deg, 
-            rgba(0, 0, 0, 0.8) 0%,
-            rgba(0, 0, 0, 0.4) 80px,
-            rgba(0, 0, 0, 0.2) 150px,
-            transparent 300px
-        );
-    }
-}
+        .shadow-gradient-right {
+            right: 0;
+            background: linear-gradient(270deg, 
+                rgba(0, 0, 0, 0.8) 0%,
+                rgba(0, 0, 0, 0.5) 120px,
+                rgba(0, 0, 0, 0.3) 200px,
+                rgba(0, 0, 0, 0.1) 300px,
+                transparent 400px
+            );
+        }
 
-@media (max-width: 900px) {
-    .shadow-gradient-left,
-    .shadow-gradient-right {
-        width: 200px;
-    }
-}
+        /* Responsive */
+        @media (max-width: 1200px) {
+            body::before,
+            body::after {
+                width: 80px;
+                background-size: 80px auto;
+            }
+            
+            .shadow-gradient-left,
+            .shadow-gradient-right {
+                width: 300px;
+            }
+            
+            .shadow-gradient-left {
+                background: linear-gradient(90deg, 
+                    rgba(0, 0, 0, 0.8) 0%,
+                    rgba(0, 0, 0, 0.4) 80px,
+                    rgba(0, 0, 0, 0.2) 150px,
+                    transparent 300px
+                );
+            }
+            
+            .shadow-gradient-right {
+                background: linear-gradient(270deg, 
+                    rgba(0, 0, 0, 0.8) 0%,
+                    rgba(0, 0, 0, 0.4) 80px,
+                    rgba(0, 0, 0, 0.2) 150px,
+                    transparent 300px
+                );
+            }
+        }
 
-@media (max-width: 600px) {
-    .shadow-gradient-left,
-    .shadow-gradient-right {
-        display: none;
-    }
-}
+        @media (max-width: 900px) {
+            body::before,
+            body::after {
+                width: 40px;
+                background-size: 40px auto;
+            }
+            
+            .shadow-gradient-left,
+            .shadow-gradient-right {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body::before,
+            body::after {
+                display: none;
+            }
+            
+            .shadow-gradient-left,
+            .shadow-gradient-right {
+                display: none;
+            }
+        }
         
         .container {
             max-width: 900px;
@@ -417,7 +464,7 @@ body::after {
     </style>
 </head>
 <body>
-        <div class="shadow-gradient-left"></div>
+    <div class="shadow-gradient-left"></div>
     <div class="shadow-gradient-right"></div>
     
     <div class="container">
