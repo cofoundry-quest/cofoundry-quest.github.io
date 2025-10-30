@@ -96,6 +96,62 @@
             color: #ffd700;
         }
         
+        /* LEADERBOARD STYLES */
+        .leaderboard-display {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            border-radius: 8px;
+            margin: 40px 0;
+            border: 1px solid #8b7355;
+        }
+        
+        .leaderboard-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+        
+        .dwarf-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            margin: 10px 0;
+            background: rgba(139, 115, 85, 0.2);
+            border-radius: 5px;
+            font-size: 1.1em;
+        }
+        
+        .dwarf-row.top-three {
+            background: rgba(212, 175, 55, 0.3);
+            border: 1px solid #d4af37;
+        }
+        
+        .dwarf-rank {
+            font-weight: bold;
+            min-width: 50px;
+            text-align: left;
+        }
+        
+        .dwarf-name {
+            flex: 1;
+            text-align: left;
+            padding: 0 20px;
+        }
+        
+        .dwarf-gp {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .leaderboard-stats {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #8b7355;
+            color: #b8960f;
+            font-size: 0.9em;
+        }
+        
         .discord-button {
             display: inline-block;
             margin-top: 40px;
@@ -150,6 +206,12 @@
         <div class="hoard-display">
             <div class="hoard-title">THE HOARD</div>
             <div id="hoard-data" class="loading">Loading The Hoard...</div>
+        </div>
+        
+        <!-- NEW: LEADERBOARD SECTION -->
+        <div class="leaderboard-display">
+            <div class="leaderboard-title">🏆 GLORY POINTS LEADERBOARD 🏆</div>
+            <div id="leaderboard-data" class="loading">Loading Leaderboard...</div>
         </div>
         
         <a href="https://discord.gg/R2WTXwbYah" class="discord-button" target="_blank">
@@ -218,11 +280,10 @@
         
         async function fetchHoardData() {
             try {
-                console.log('Starting fetch...');
+                console.log('Starting hoard fetch...');
                 
                 // Fetch hoard data from "The Hoard" sheet
                 const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Hoard`;
-                console.log('Fetching metals from The Hoard sheet...');
                 
                 const response = await fetch(sheetUrl);
                 const text = await response.text();
@@ -231,13 +292,10 @@
                 const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
                 const json = jsonMatch ? JSON.parse(jsonMatch[1]) : JSON.parse(text.substr(47).slice(0, -2));
                 
-                console.log('Parsed metals data');
-                
                 // Get metal data from "The Hoard" sheet
                 const rows = json.table.rows;
                 let metals = {};
                 
-                // FIXED: Start at i=0 to include all data rows
                 for (let i = 0; i < rows.length; i++) {
                     const cells = rows[i].c;
                     if (cells && cells[0] && cells[1]) {
@@ -246,16 +304,12 @@
                         
                         if (metalName && weight > 0 && !metalName.toLowerCase().includes('hoard')) {
                             metals[metalName] = weight;
-                            console.log('✅ Added:', metalName, weight);
                         }
                     }
                 }
                 
-                console.log('All metals:', metals);
-                
                 // Fetch prices from "The Great Ledger" sheet K2:K5
                 const ledgerUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Great%20Ledger&range=K2:K5`;
-                console.log('Fetching prices from The Great Ledger...');
                 
                 const pricesResponse = await fetch(ledgerUrl);
                 const pricesText = await pricesResponse.text();
@@ -276,16 +330,13 @@
                     platinum: parseFloat(pricesRows[3].c[0].v)
                 };
                 
-                console.log('Got prices from sheet:', prices);
-                
                 // Display the data
                 displayHoard(metals, prices);
                 
             } catch (error) {
-                console.error('ERROR:', error);
-                console.error('Error message:', error.message);
+                console.error('Hoard ERROR:', error);
                 document.getElementById('hoard-data').innerHTML = 
-                    `<p style="color: #ff6b6b;">Error loading data. Check console.</p>`;
+                    `<p style="color: #ff6b6b;">Error loading data.</p>`;
             }
         }
         
@@ -336,14 +387,116 @@
             document.getElementById('hoard-data').innerHTML = html;
         }
         
+        // NEW: FETCH LEADERBOARD DATA
+        async function fetchLeaderboard() {
+            try {
+                console.log('Starting leaderboard fetch...');
+                
+                // Fetch from "The Great Ledger" sheet - columns B (dwarf name) and H (glory points)
+                const ledgerUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Great%20Ledger`;
+                
+                const response = await fetch(ledgerUrl);
+                const text = await response.text();
+                
+                // Parse the JSONP response
+                const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
+                const json = jsonMatch ? JSON.parse(jsonMatch[1]) : JSON.parse(text.substr(47).slice(0, -2));
+                
+                const rows = json.table.rows;
+                let dwarves = [];
+                
+                // Extract dwarf names (column B = index 1) and GP (column H = index 7)
+                for (let i = 1; i < rows.length; i++) {
+                    const cells = rows[i].c;
+                    if (cells && cells[1] && cells[7]) {
+                        const dwarfName = cells[1].v;
+                        const gloryPoints = parseFloat(cells[7].v) || 0;
+                        
+                        // Skip if name contains "HOARD" or GP is 0
+                        if (dwarfName && !dwarfName.toLowerCase().includes('hoard') && gloryPoints > 0) {
+                            dwarves.push({
+                                name: dwarfName,
+                                gp: gloryPoints
+                            });
+                        }
+                    }
+                }
+                
+                // Sort by GP (highest first)
+                dwarves.sort((a, b) => b.gp - a.gp);
+                
+                console.log('Found dwarves:', dwarves);
+                
+                // Display the leaderboard
+                displayLeaderboard(dwarves);
+                
+            } catch (error) {
+                console.error('Leaderboard ERROR:', error);
+                document.getElementById('leaderboard-data').innerHTML = 
+                    `<p style="color: #ff6b6b;">Error loading leaderboard.</p>`;
+            }
+        }
+        
+        function displayLeaderboard(dwarves) {
+            let html = '';
+            
+            if (dwarves.length === 0) {
+                html = '<p style="color: #b8960f;">No Glory Points earned yet. Be the first!</p>';
+            } else {
+                // Display each dwarf
+                dwarves.forEach((dwarf, index) => {
+                    const rank = index + 1;
+                    let rankDisplay = '';
+                    let topThreeClass = '';
+                    
+                    if (rank === 1) {
+                        rankDisplay = '🥇';
+                        topThreeClass = 'top-three';
+                    } else if (rank === 2) {
+                        rankDisplay = '🥈';
+                        topThreeClass = 'top-three';
+                    } else if (rank === 3) {
+                        rankDisplay = '🥉';
+                        topThreeClass = 'top-three';
+                    } else {
+                        rankDisplay = `${rank}.`;
+                    }
+                    
+                    html += `
+                        <div class="dwarf-row ${topThreeClass}">
+                            <span class="dwarf-rank">${rankDisplay}</span>
+                            <span class="dwarf-name">${dwarf.name}</span>
+                            <span class="dwarf-gp">${dwarf.gp.toFixed(2)} GP</span>
+                        </div>
+                    `;
+                });
+                
+                // Add stats
+                const totalDwarves = dwarves.length;
+                const totalGP = dwarves.reduce((sum, d) => sum + d.gp, 0);
+                
+                html += `
+                    <div class="leaderboard-stats">
+                        Total Dwarves: ${totalDwarves} | Total Glory Earned: ${totalGP.toFixed(2)} GP
+                    </div>
+                `;
+            }
+            
+            document.getElementById('leaderboard-data').innerHTML = html;
+        }
+        
         // Display random quote on page load
         displayRandomQuote();
         
-        // Load hoard data immediately
+        // Load both hoard and leaderboard data immediately
         fetchHoardData();
+        fetchLeaderboard();
         
-        // Refresh hoard data every 5 minutes
-        setInterval(fetchHoardData, 5 * 60 * 1000);
+        // Refresh both every 5 minutes
+        setInterval(() => {
+            fetchHoardData();
+            fetchLeaderboard();
+        }, 5 * 60 * 1000);
     </script>
 </body>
 </html>
