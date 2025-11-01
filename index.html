@@ -307,7 +307,7 @@
             text-transform: uppercase;
         }
         
-        .metal-row, .dwarf-row {
+        .metal-row {
             background: #d4c5a9;
             border: 3px solid #3d2817;
             padding: 12px 15px;
@@ -321,7 +321,26 @@
             text-align: center;
         }
         
-        .metal-row:hover, .dwarf-row:hover {
+        .metal-row:hover {
+            background: #c9b896;
+        }
+
+        .dwarf-row {
+            background: #d4c5a9;
+            border: 3px solid #3d2817;
+            padding: 12px 15px 12px 45px;
+            margin: 8px 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 2px 2px 0 #8b6f47;
+            font-size: 1em;
+            text-align: center;
+            position: relative;
+        }
+
+        .dwarf-row:hover {
             background: #c9b896;
         }
         
@@ -333,57 +352,42 @@
                 0 0 10px rgba(255, 215, 0, 0.3);
         }
 
-        .dwarf-row {
-    background: #d4c5a9;
-    border: 3px solid #3d2817;
-    padding: 12px 15px 12px 40px;  /* Changed: added 40px left padding */
-    margin: 8px 0;
-    display: flex;
-    justify-content: flex-start;  /* Changed from center to flex-start */
-    align-items: center;
-    gap: 20px;
-    box-shadow: 2px 2px 0 #8b6f47;
-    font-size: 1em;
-    text-align: center;
-    position: relative;  /* Added for positioning rank */
-}
-
-.dwarf-rank {
-    font-weight: bold;
-    min-width: 30px;  /* Changed from 40px to 30px */
-    font-size: 1.2em;
-    text-align: left;  /* Changed from default to left */
-    position: absolute;  /* Position it absolutely */
-    left: 15px;  /* 15px from left edge */
-}
-
-.dwarf-name {
-    cursor: pointer;
-    transition: color 0.2s;
-    flex: 1;  /* Added to take remaining space */
-    text-align: center;  /* Keep name centered */
-}
-
-.dwarf-gp {
-    color: #8b4513;
-    font-weight: bold;
-    min-width: 100px;  /* Added to keep GP column stable */
-    text-align: right;  /* Right-align the GP */
-}
-        
-        .metal-name, .dwarf-name {
-            font-weight: bold;
-        }
-        
-        .metal-weight, .dwarf-gp {
-            color: #8b4513;
-            font-weight: bold;
-        }
-        
         .dwarf-rank {
             font-weight: bold;
-            min-width: 40px;
+            min-width: 30px;
             font-size: 1.2em;
+            text-align: left;
+            position: absolute;
+            left: 15px;
+        }
+
+        .dwarf-name {
+            cursor: pointer;
+            transition: color 0.2s;
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .dwarf-name:hover {
+            color: #ffd700;
+            text-decoration: underline;
+        }
+
+        .dwarf-gp {
+            color: #8b4513;
+            font-weight: bold;
+            min-width: 100px;
+            text-align: right;
+        }
+        
+        .metal-name {
+            font-weight: bold;
+        }
+        
+        .metal-weight {
+            color: #8b4513;
+            font-weight: bold;
         }
         
         .total-value {
@@ -641,6 +645,7 @@
             display: inline-block;
             font-size: 3em;
             margin: 10px 0;
+            text-align: center;
         }
 
         .profile-close {
@@ -667,16 +672,6 @@
         .profile-close:active {
             transform: translate(3px, 3px);
             box-shadow: none;
-        }
-
-        .dwarf-name {
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .dwarf-name:hover {
-            color: #ffd700;
-            text-decoration: underline;
         }
 
         @keyframes fadeIn {
@@ -761,10 +756,23 @@
             }
             
             .metal-row, .dwarf-row {
-                padding: 10px;
+                padding: 10px 10px 10px 20px;
                 font-size: 0.9em;
                 flex-direction: column;
                 gap: 5px;
+            }
+
+            .dwarf-rank {
+                position: static;
+                text-align: center;
+            }
+
+            .dwarf-name {
+                text-align: center;
+            }
+
+            .dwarf-gp {
+                text-align: center;
             }
             
             .total-value {
@@ -882,7 +890,7 @@
         </div>
     </div>
 
-<script>
+    <script>
         // CONFIGURATION
         const SHEET_ID = '1-LJvYKvw0Pgt6vCA6aSFROMwsmY3JLraujWUSVbpAd8';
         const DWARVES_PER_PAGE = 10;
@@ -942,7 +950,7 @@
             document.getElementById('random-quote').textContent = `"${quote}"`;
         }
         
-        // NEW: Get emoji for title
+        // Get emoji for title
         function getTitleEmoji(title) {
             const titleEmojis = {
                 "The Cofounder": "👑",
@@ -1078,7 +1086,6 @@
                 
                 for (let i = 1; i < rows.length; i++) {
                     const cells = rows[i].c;
-                    // Column B = Name (cells[1]), Column J = GP (cells[9]), Column K = Title (cells[10])
                     if (cells && cells[1] && cells[9]) {
                         const dwarfName = cells[1].v;
                         const gloryPoints = parseFloat(cells[9].v) || 0;
@@ -1107,43 +1114,42 @@
             }
         }
         
-function displayLeaderboard() {
-    let html = '';
-    
-    if (allDwarves.length === 0) {
-        html = '<p style="text-align: center; color: #8b6f47;">No Glory Points earned yet. Be the first!</p>';
-    } else {
-        const totalPages = Math.ceil(allDwarves.length / DWARVES_PER_PAGE);
-        const startIndex = (currentPage - 1) * DWARVES_PER_PAGE;
-        const endIndex = Math.min(startIndex + DWARVES_PER_PAGE, allDwarves.length);
-        const pageDwarves = allDwarves.slice(startIndex, endIndex);
-        
-        pageDwarves.forEach((dwarf, pageIndex) => {
-            const actualRank = startIndex + pageIndex + 1;
-            let topThreeClass = '';
+        function displayLeaderboard() {
+            let html = '';
             
-            // Top 3 get gold highlighting
-            if (actualRank === 1 || actualRank === 2 || actualRank === 3) {
-                topThreeClass = 'top-three';
-            }
-            
-            html += `
-                <div class="dwarf-row ${topThreeClass}">
-                    <span class="dwarf-rank">${actualRank}.</span>
-                    <span class="dwarf-name">${dwarf.name}</span>
-                    <span class="dwarf-gp">${dwarf.gp.toFixed(2)} GP</span>
-                </div>
-            `;
-        });
-        
-        if (allDwarves.length > DWARVES_PER_PAGE) {
-            html += `
-                <div class="pagination-controls">
-                    <button class="pagination-button" id="prev-button" ${currentPage === 1 ? 'disabled' : ''}>
-                        ← PREV
-                    </button>
-                    <span class="pagination-info">
-                        Page ${currentPage} of ${totalPages
+            if (allDwarves.length === 0) {
+                html = '<p style="text-align: center; color: #8b6f47;">No Glory Points earned yet. Be the first!</p>';
+            } else {
+                const totalPages = Math.ceil(allDwarves.length / DWARVES_PER_PAGE);
+                const startIndex = (currentPage - 1) * DWARVES_PER_PAGE;
+                const endIndex = Math.min(startIndex + DWARVES_PER_PAGE, allDwarves.length);
+                const pageDwarves = allDwarves.slice(startIndex, endIndex);
+                
+                pageDwarves.forEach((dwarf, pageIndex) => {
+                    const actualRank = startIndex + pageIndex + 1;
+                    let topThreeClass = '';
+                    
+                    if (actualRank <= 3) {
+                        topThreeClass = 'top-three';
+                    }
+                    
+                    html += `
+                        <div class="dwarf-row ${topThreeClass}">
+                            <span class="dwarf-rank">${actualRank}.</span>
+                            <span class="dwarf-name">${dwarf.name}</span>
+                            <span class="dwarf-gp">${dwarf.gp.toFixed(2)} GP</span>
+                        </div>
+                    `;
+                });
+                
+                if (allDwarves.length > DWARVES_PER_PAGE) {
+                    html += `
+                        <div class="pagination-controls">
+                            <button class="pagination-button" id="prev-button" ${currentPage === 1 ? 'disabled' : ''}>
+                                ← PREV
+                            </button>
+                            <span class="pagination-info">
+                                Page ${currentPage} of ${totalPages}
                             </span>
                             <button class="pagination-button" id="next-button" ${currentPage === totalPages ? 'disabled' : ''}>
                                 NEXT →
@@ -1184,53 +1190,53 @@ function displayLeaderboard() {
         }
         
         // DWARF PROFILE MODAL SYSTEM
-function showDwarfProfile(dwarfName) {
-    const dwarf = allDwarves.find(d => d.name === dwarfName);
-    if (!dwarf) return;
-    
-    const rank = allDwarves.findIndex(d => d.name === dwarfName) + 1;
-    
-    const totalGP = allDwarves.reduce((sum, d) => sum + d.gp, 0);
-    const percentOfTotal = totalGP > 0 ? ((dwarf.gp / totalGP) * 100).toFixed(1) : 0;
-    
-    const titleEmoji = getTitleEmoji(dwarf.title);
-    
-    const modalHTML = `
-        <div class="profile-modal active" id="dwarfProfileModal" onclick="closeDwarfProfile(event)">
-            <div class="profile-content" onclick="event.stopPropagation()">
-                <div class="profile-header">
-                    <h2 class="profile-name">⚒ ${dwarf.name} ⚒</h2>
-                </div>
-                
-                <div class="profile-body">
-                    <div class="profile-section">
-                        <div class="profile-section-title">🏆 RANK & GLORY 🏆</div>
-                        <div class="profile-rank-badge" style="text-align: center;">${titleEmoji} ${dwarf.title}</div>
-                        <div class="profile-stat">
-                            <span class="profile-stat-label">Glory Points:</span>
-                            <span class="profile-stat-value">${dwarf.gp.toFixed(2)} GP</span>
+        function showDwarfProfile(dwarfName) {
+            const dwarf = allDwarves.find(d => d.name === dwarfName);
+            if (!dwarf) return;
+            
+            const rank = allDwarves.findIndex(d => d.name === dwarfName) + 1;
+            
+            const totalGP = allDwarves.reduce((sum, d) => sum + d.gp, 0);
+            const percentOfTotal = totalGP > 0 ? ((dwarf.gp / totalGP) * 100).toFixed(1) : 0;
+            
+            const titleEmoji = getTitleEmoji(dwarf.title);
+            
+            const modalHTML = `
+                <div class="profile-modal active" id="dwarfProfileModal" onclick="closeDwarfProfile(event)">
+                    <div class="profile-content" onclick="event.stopPropagation()">
+                        <div class="profile-header">
+                            <h2 class="profile-name">⚒ ${dwarf.name} ⚒</h2>
                         </div>
-                        <div class="profile-stat">
-                            <span class="profile-stat-label">Rank:</span>
-                            <span class="profile-stat-value">#${rank} of ${allDwarves.length}</span>
-                        </div>
-                        <div class="profile-stat">
-                            <span class="profile-stat-label">Hoard Share:</span>
-                            <span class="profile-stat-value">${percentOfTotal}%</span>
+                        
+                        <div class="profile-body">
+                            <div class="profile-section">
+                                <div class="profile-section-title">🏆 RANK & GLORY 🏆</div>
+                                <div class="profile-rank-badge">${titleEmoji} ${dwarf.title}</div>
+                                <div class="profile-stat">
+                                    <span class="profile-stat-label">Glory Points:</span>
+                                    <span class="profile-stat-value">${dwarf.gp.toFixed(2)} GP</span>
+                                </div>
+                                <div class="profile-stat">
+                                    <span class="profile-stat-label">Rank:</span>
+                                    <span class="profile-stat-value">#${rank} of ${allDwarves.length}</span>
+                                </div>
+                                <div class="profile-stat">
+                                    <span class="profile-stat-label">Hoard Share:</span>
+                                    <span class="profile-stat-value">${percentOfTotal}%</span>
+                                </div>
+                            </div>
+                            
+                            <button class="profile-close" onclick="closeDwarfProfile()">
+                                CLOSE
+                            </button>
                         </div>
                     </div>
-                    
-                    <button class="profile-close" onclick="closeDwarfProfile()">
-                        CLOSE
-                    </button>
                 </div>
-            </div>
-        </div>
-    `;
-    
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-    document.body.style.overflow = 'hidden';
-}
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            document.body.style.overflow = 'hidden';
+        }
 
         function closeDwarfProfile(event) {
             if (event && event.target.className !== 'profile-modal active') return;
