@@ -643,8 +643,67 @@
 
         .profile-rank-badge {
             display: inline-block;
-            font-size: 3em;
+            font-size: 1.8em;
             margin: 10px 0;
+            text-align: center;
+        }
+
+        /* Badge System */
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+            padding: 15px;
+            background: #d4c5a9;
+            border: 3px solid #3d2817;
+            box-shadow: inset 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .badge {
+            font-size: 2.5em;
+            text-align: center;
+            padding: 15px 10px;
+            border: 3px solid #8b6f47;
+            background: #e8dcc4;
+            box-shadow: 2px 2px 0 #8b6f47;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .badge.locked {
+            opacity: 0.3;
+            filter: grayscale(100%) brightness(0.7);
+        }
+
+        .badge.unlocked {
+            box-shadow: 
+                2px 2px 0 #8b6f47,
+                0 0 10px rgba(255, 215, 0, 0.4),
+                inset 0 0 10px rgba(255, 215, 0, 0.2);
+            animation: badgeGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes badgeGlow {
+            0%, 100% { 
+                box-shadow: 
+                    2px 2px 0 #8b6f47,
+                    0 0 10px rgba(255, 215, 0, 0.4),
+                    inset 0 0 10px rgba(255, 215, 0, 0.2);
+            }
+            50% { 
+                box-shadow: 
+                    2px 2px 0 #8b6f47,
+                    0 0 20px rgba(255, 215, 0, 0.6),
+                    inset 0 0 15px rgba(255, 215, 0, 0.3);
+            }
+        }
+
+        .badge-name {
+            font-size: 0.35em;
+            color: #5d4a36;
+            margin-top: 5px;
+            font-weight: bold;
             text-align: center;
         }
 
@@ -804,8 +863,13 @@
             }
             
             .profile-name {
-                font-size: 1.5em;
+                font-size: 1.8em !important;
                 letter-spacing: 2px;
+            }
+
+            .profile-rank-badge {
+                font-size: 1.3em !important;
+                margin: 5px 0;
             }
             
             .profile-body {
@@ -814,6 +878,21 @@
             
             .profile-stat {
                 font-size: 0.95em;
+            }
+
+            .badge-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+                padding: 10px;
+            }
+
+            .badge {
+                font-size: 2em;
+                padding: 10px 5px;
+            }
+
+            .badge-name {
+                font-size: 0.3em;
             }
         }
 
@@ -902,6 +981,16 @@
         const SHEET_ID = '1-LJvYKvw0Pgt6vCA6aSFROMwsmY3JLraujWUSVbpAd8';
         const DWARVES_PER_PAGE = 10;
         
+        // Badge System - 6 badges (2 rows x 3 columns)
+        const BADGES = [
+            { title: "Copper Collector", emoji: "🔶", threshold: 10 },
+            { title: "Bronze Hauler", emoji: "🟤", threshold: 50 },
+            { title: "Silver Seeker", emoji: "⚪", threshold: 100 },
+            { title: "Hoard Builder", emoji: "🏗️", threshold: 500 },
+            { title: "Elder Champion", emoji: "⚔️", threshold: 1000 },
+            { title: "Gold Guardian", emoji: "🟡", threshold: 5000 }
+        ];
+        
         // Global state for leaderboard
         let allDwarves = [];
         let currentPage = 1;
@@ -970,6 +1059,31 @@
                 "Apprentice Scrapper": "🔨"
             };
             return titleEmojis[title] || "⚒️";
+        }
+
+        // Get badge status for a dwarf
+        function getBadgeStatus(dwarfGP) {
+            return BADGES.map(badge => ({
+                ...badge,
+                unlocked: dwarfGP >= badge.threshold
+            }));
+        }
+
+        // Generate badge HTML
+        function generateBadgeHTML(badges) {
+            let html = '<div class="badge-grid">';
+            badges.forEach(badge => {
+                const statusClass = badge.unlocked ? 'unlocked' : 'locked';
+                const displayEmoji = badge.unlocked ? badge.emoji : '❌';
+                html += `
+                    <div class="badge ${statusClass}">
+                        <div>${displayEmoji}</div>
+                        <div class="badge-name">${badge.title}</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
         }
         
         async function fetchHoardData() {
@@ -1065,14 +1179,14 @@
                 html += `
                     <div class="metal-row">
                         <span class="metal-name">${emoji} ${metal}</span>
-                        <span class="metal-weight">  ${weight.toFixed(2)} ${unit}</span>
+                        <span class="metal-weight">${weight.toFixed(2)} ${unit}</span>
                     </div>
                 `;
             }
             
             html += `
                 <div class="total-value">
-                    Estimated Value:     💰 $${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                    Estimated Value: 💰 $${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                 </div>
             `;
             
@@ -1207,6 +1321,8 @@
             const percentOfTotal = totalGP > 0 ? ((dwarf.gp / totalGP) * 100).toFixed(1) : 0;
             
             const titleEmoji = getTitleEmoji(dwarf.title);
+            const badges = getBadgeStatus(dwarf.gp);
+            const badgeHTML = generateBadgeHTML(badges);
             
             const modalHTML = `
                 <div class="profile-modal active" id="dwarfProfileModal" onclick="closeDwarfProfile(event)">
@@ -1217,8 +1333,12 @@
                         
                         <div class="profile-body">
                             <div class="profile-section">
-                                <div class="profile-section-title">🏆 RANK & GLORY 🏆</div>
                                 <div class="profile-rank-badge">${titleEmoji} ${dwarf.title}</div>
+                                ${badgeHTML}
+                            </div>
+                            
+                            <div class="profile-section">
+                                <div class="profile-section-title">🏆 RANK & GLORY 🏆</div>
                                 <div class="profile-stat">
                                     <span class="profile-stat-label">Glory Points:</span>
                                     <span class="profile-stat-value">${dwarf.gp.toFixed(2)} GP</span>
