@@ -844,7 +844,7 @@
         </div>
     </div>
 
-    <script>
+<script>
         // CONFIGURATION
         const SHEET_ID = '1-LJvYKvw0Pgt6vCA6aSFROMwsmY3JLraujWUSVbpAd8';
         const DWARVES_PER_PAGE = 10;
@@ -904,6 +904,21 @@
             document.getElementById('random-quote').textContent = `"${quote}"`;
         }
         
+        // NEW: Get emoji for title
+        function getTitleEmoji(title) {
+            const titleEmojis = {
+                "The Cofounder": "👑",
+                "Gold Guardian": "🟡",
+                "Elder Champion": "⚔️",
+                "Hoard Builder": "🏗️",
+                "Silver Seeker": "⚪",
+                "Bronze Hauler": "🟤",
+                "Copper Collector": "🔶",
+                "Apprentice Scrapper": "🔨"
+            };
+            return titleEmojis[title] || "⚒️";
+        }
+        
         async function fetchHoardData() {
             try {
                 const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Hoard`;
@@ -928,7 +943,6 @@
                     }
                 }
                 
-                // UPDATED: Fetch from Metal Prices sheet, B2:B7
                 const ledgerUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Metal%20Prices&range=B2:B7`;
                 const pricesResponse = await fetch(ledgerUrl);
                 const pricesText = await pricesResponse.text();
@@ -941,7 +955,6 @@
                     throw new Error('Not enough price data in sheet');
                 }
                 
-                // UPDATED: Include new silver types
                 const prices = {
                     copper: parseFloat(pricesRows[0].c[0].v),
                     silver999: parseFloat(pricesRows[1].c[0].v),
@@ -975,13 +988,11 @@
                     emoji = '🟤';
                 } else if (metalLower.includes('silver')) {
                     emoji = '⚪';
-                    // UPDATED: Detect silver purity
                     if (metalLower.includes('.925') || metalLower.includes('925')) {
                         value = weight * prices.silver925 * 0.999;
                     } else if (metalLower.includes('.900') || metalLower.includes('900')) {
                         value = weight * prices.silver900 * 0.999;
                     } else {
-                        // Assume .999
                         value = weight * prices.silver999 * 0.999;
                     }
                 } else if (metalLower.includes('gold')) {
@@ -1029,15 +1040,17 @@
                 
                 for (let i = 1; i < rows.length; i++) {
                     const cells = rows[i].c;
-                    // UPDATED: Glory Points moved from column H (cells[7]) to column J (cells[9])
+                    // Column B = Name (cells[1]), Column J = GP (cells[9]), Column K = Title (cells[10])
                     if (cells && cells[1] && cells[9]) {
                         const dwarfName = cells[1].v;
                         const gloryPoints = parseFloat(cells[9].v) || 0;
+                        const title = cells[10] ? cells[10].v : "Apprentice Scrapper";
                         
                         if (dwarfName && !dwarfName.toLowerCase().includes('hoard') && gloryPoints > 0) {
                             dwarves.push({
                                 name: dwarfName,
-                                gp: gloryPoints
+                                gp: gloryPoints,
+                                title: title
                             });
                         }
                     }
@@ -1084,6 +1097,8 @@
                     } else {
                         rankDisplay = `${actualRank}.`;
                     }
+                    
+                    const titleEmoji = getTitleEmoji(dwarf.title);
                     
                     html += `
                         <div class="dwarf-row ${topThreeClass}">
@@ -1138,36 +1153,35 @@
                 });
             }
             
-            // Make dwarf names clickable
             makeNamesClickable();
         }
         
         // DWARF PROFILE MODAL SYSTEM
         function showDwarfProfile(dwarfName) {
-            // Find the dwarf's data
             const dwarf = allDwarves.find(d => d.name === dwarfName);
             if (!dwarf) return;
             
-            // Calculate their rank
             const rank = allDwarves.findIndex(d => d.name === dwarfName) + 1;
             
-            // Determine rank badge emoji
             let rankBadge = '';
             if (rank === 1) rankBadge = '🥇';
             else if (rank === 2) rankBadge = '🥈';
             else if (rank === 3) rankBadge = '🥉';
             else rankBadge = `#${rank}`;
             
-            // Calculate percentages for context
             const totalGP = allDwarves.reduce((sum, d) => sum + d.gp, 0);
             const percentOfTotal = totalGP > 0 ? ((dwarf.gp / totalGP) * 100).toFixed(1) : 0;
             
-            // Build the modal HTML
+            const titleEmoji = getTitleEmoji(dwarf.title);
+            
             const modalHTML = `
                 <div class="profile-modal active" id="dwarfProfileModal" onclick="closeDwarfProfile(event)">
                     <div class="profile-content" onclick="event.stopPropagation()">
                         <div class="profile-header">
                             <h2 class="profile-name">⚒ ${dwarf.name} ⚒</h2>
+                            <div style="color: #d4af37; font-size: 1.2em; margin-top: 10px; font-style: italic;">
+                                ${titleEmoji} ${dwarf.title}
+                            </div>
                         </div>
                         
                         <div class="profile-body">
@@ -1196,15 +1210,11 @@
                 </div>
             `;
             
-            // Add to page
             document.body.insertAdjacentHTML('beforeend', modalHTML);
-            
-            // Prevent body scroll when modal is open
             document.body.style.overflow = 'hidden';
         }
 
         function closeDwarfProfile(event) {
-            // Only close if clicking the backdrop or close button
             if (event && event.target.className !== 'profile-modal active') return;
             
             const modal = document.getElementById('dwarfProfileModal');
@@ -1212,11 +1222,9 @@
                 modal.remove();
             }
             
-            // Re-enable body scroll
             document.body.style.overflow = 'auto';
         }
 
-        // Make dwarf names clickable when leaderboard is displayed
         function makeNamesClickable() {
             document.querySelectorAll('.dwarf-name').forEach(nameElement => {
                 nameElement.style.cursor = 'pointer';
