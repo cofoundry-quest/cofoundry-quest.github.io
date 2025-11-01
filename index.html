@@ -332,6 +332,44 @@
                 2px 2px 0 #8b6f47,
                 0 0 10px rgba(255, 215, 0, 0.3);
         }
+
+        .dwarf-row {
+    background: #d4c5a9;
+    border: 3px solid #3d2817;
+    padding: 12px 15px 12px 40px;  /* Changed: added 40px left padding */
+    margin: 8px 0;
+    display: flex;
+    justify-content: flex-start;  /* Changed from center to flex-start */
+    align-items: center;
+    gap: 20px;
+    box-shadow: 2px 2px 0 #8b6f47;
+    font-size: 1em;
+    text-align: center;
+    position: relative;  /* Added for positioning rank */
+}
+
+.dwarf-rank {
+    font-weight: bold;
+    min-width: 30px;  /* Changed from 40px to 30px */
+    font-size: 1.2em;
+    text-align: left;  /* Changed from default to left */
+    position: absolute;  /* Position it absolutely */
+    left: 15px;  /* 15px from left edge */
+}
+
+.dwarf-name {
+    cursor: pointer;
+    transition: color 0.2s;
+    flex: 1;  /* Added to take remaining space */
+    text-align: center;  /* Keep name centered */
+}
+
+.dwarf-gp {
+    color: #8b4513;
+    font-weight: bold;
+    min-width: 100px;  /* Added to keep GP column stable */
+    text-align: right;  /* Right-align the GP */
+}
         
         .metal-name, .dwarf-name {
             font-weight: bold;
@@ -1069,54 +1107,43 @@
             }
         }
         
-        function displayLeaderboard() {
-            let html = '';
+function displayLeaderboard() {
+    let html = '';
+    
+    if (allDwarves.length === 0) {
+        html = '<p style="text-align: center; color: #8b6f47;">No Glory Points earned yet. Be the first!</p>';
+    } else {
+        const totalPages = Math.ceil(allDwarves.length / DWARVES_PER_PAGE);
+        const startIndex = (currentPage - 1) * DWARVES_PER_PAGE;
+        const endIndex = Math.min(startIndex + DWARVES_PER_PAGE, allDwarves.length);
+        const pageDwarves = allDwarves.slice(startIndex, endIndex);
+        
+        pageDwarves.forEach((dwarf, pageIndex) => {
+            const actualRank = startIndex + pageIndex + 1;
+            let topThreeClass = '';
             
-            if (allDwarves.length === 0) {
-                html = '<p style="text-align: center; color: #8b6f47;">No Glory Points earned yet. Be the first!</p>';
-            } else {
-                const totalPages = Math.ceil(allDwarves.length / DWARVES_PER_PAGE);
-                const startIndex = (currentPage - 1) * DWARVES_PER_PAGE;
-                const endIndex = Math.min(startIndex + DWARVES_PER_PAGE, allDwarves.length);
-                const pageDwarves = allDwarves.slice(startIndex, endIndex);
-                
-                pageDwarves.forEach((dwarf, pageIndex) => {
-                    const actualRank = startIndex + pageIndex + 1;
-                    let rankDisplay = '';
-                    let topThreeClass = '';
-                    
-                    if (actualRank === 1) {
-                        rankDisplay = '🥇';
-                        topThreeClass = 'top-three';
-                    } else if (actualRank === 2) {
-                        rankDisplay = '🥈';
-                        topThreeClass = 'top-three';
-                    } else if (actualRank === 3) {
-                        rankDisplay = '🥉';
-                        topThreeClass = 'top-three';
-                    } else {
-                        rankDisplay = `${actualRank}.`;
-                    }
-                    
-                    const titleEmoji = getTitleEmoji(dwarf.title);
-                    
-                    html += `
-                        <div class="dwarf-row ${topThreeClass}">
-                            <span class="dwarf-rank">${rankDisplay}</span>
-                            <span class="dwarf-name">${dwarf.name}</span>
-                            <span class="dwarf-gp">${dwarf.gp.toFixed(2)} GP</span>
-                        </div>
-                    `;
-                });
-                
-                if (allDwarves.length > DWARVES_PER_PAGE) {
-                    html += `
-                        <div class="pagination-controls">
-                            <button class="pagination-button" id="prev-button" ${currentPage === 1 ? 'disabled' : ''}>
-                                ← PREV
-                            </button>
-                            <span class="pagination-info">
-                                Page ${currentPage} of ${totalPages}
+            // Top 3 get gold highlighting
+            if (actualRank === 1 || actualRank === 2 || actualRank === 3) {
+                topThreeClass = 'top-three';
+            }
+            
+            html += `
+                <div class="dwarf-row ${topThreeClass}">
+                    <span class="dwarf-rank">${actualRank}.</span>
+                    <span class="dwarf-name">${dwarf.name}</span>
+                    <span class="dwarf-gp">${dwarf.gp.toFixed(2)} GP</span>
+                </div>
+            `;
+        });
+        
+        if (allDwarves.length > DWARVES_PER_PAGE) {
+            html += `
+                <div class="pagination-controls">
+                    <button class="pagination-button" id="prev-button" ${currentPage === 1 ? 'disabled' : ''}>
+                        ← PREV
+                    </button>
+                    <span class="pagination-info">
+                        Page ${currentPage} of ${totalPages
                             </span>
                             <button class="pagination-button" id="next-button" ${currentPage === totalPages ? 'disabled' : ''}>
                                 NEXT →
