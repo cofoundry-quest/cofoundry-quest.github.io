@@ -1157,62 +1157,53 @@
         }
         
         // DWARF PROFILE MODAL SYSTEM
-        function showDwarfProfile(dwarfName) {
-            const dwarf = allDwarves.find(d => d.name === dwarfName);
-            if (!dwarf) return;
-            
-            const rank = allDwarves.findIndex(d => d.name === dwarfName) + 1;
-            
-            let rankBadge = '';
-            if (rank === 1) rankBadge = '🥇';
-            else if (rank === 2) rankBadge = '🥈';
-            else if (rank === 3) rankBadge = '🥉';
-            else rankBadge = `#${rank}`;
-            
-            const totalGP = allDwarves.reduce((sum, d) => sum + d.gp, 0);
-            const percentOfTotal = totalGP > 0 ? ((dwarf.gp / totalGP) * 100).toFixed(1) : 0;
-            
-            const titleEmoji = getTitleEmoji(dwarf.title);
-            
-            const modalHTML = `
-                <div class="profile-modal active" id="dwarfProfileModal" onclick="closeDwarfProfile(event)">
-                    <div class="profile-content" onclick="event.stopPropagation()">
-                        <div class="profile-header">
-                            <h2 class="profile-name">⚒ ${dwarf.name} ⚒</h2>
-                            <div style="color: #d4af37; font-size: 1.2em; margin-top: 10px; font-style: italic;">
-                                ${titleEmoji} ${dwarf.title}
-                            </div>
+function showDwarfProfile(dwarfName) {
+    const dwarf = allDwarves.find(d => d.name === dwarfName);
+    if (!dwarf) return;
+    
+    const rank = allDwarves.findIndex(d => d.name === dwarfName) + 1;
+    
+    const totalGP = allDwarves.reduce((sum, d) => sum + d.gp, 0);
+    const percentOfTotal = totalGP > 0 ? ((dwarf.gp / totalGP) * 100).toFixed(1) : 0;
+    
+    const titleEmoji = getTitleEmoji(dwarf.title);
+    
+    const modalHTML = `
+        <div class="profile-modal active" id="dwarfProfileModal" onclick="closeDwarfProfile(event)">
+            <div class="profile-content" onclick="event.stopPropagation()">
+                <div class="profile-header">
+                    <h2 class="profile-name">⚒ ${dwarf.name} ⚒</h2>
+                </div>
+                
+                <div class="profile-body">
+                    <div class="profile-section">
+                        <div class="profile-section-title">🏆 RANK & GLORY 🏆</div>
+                        <div class="profile-rank-badge" style="text-align: center;">${titleEmoji} ${dwarf.title}</div>
+                        <div class="profile-stat">
+                            <span class="profile-stat-label">Glory Points:</span>
+                            <span class="profile-stat-value">${dwarf.gp.toFixed(2)} GP</span>
                         </div>
-                        
-                        <div class="profile-body">
-                            <div class="profile-section">
-                                <div class="profile-section-title">🏆 RANK & GLORY 🏆</div>
-                                <div class="profile-rank-badge">${rankBadge}</div>
-                                <div class="profile-stat">
-                                    <span class="profile-stat-label">Glory Points:</span>
-                                    <span class="profile-stat-value">${dwarf.gp.toFixed(2)} GP</span>
-                                </div>
-                                <div class="profile-stat">
-                                    <span class="profile-stat-label">Rank:</span>
-                                    <span class="profile-stat-value">#${rank} of ${allDwarves.length}</span>
-                                </div>
-                                <div class="profile-stat">
-                                    <span class="profile-stat-label">Hoard Share:</span>
-                                    <span class="profile-stat-value">${percentOfTotal}%</span>
-                                </div>
-                            </div>
-                            
-                            <button class="profile-close" onclick="closeDwarfProfile()">
-                                CLOSE
-                            </button>
+                        <div class="profile-stat">
+                            <span class="profile-stat-label">Rank:</span>
+                            <span class="profile-stat-value">#${rank} of ${allDwarves.length}</span>
+                        </div>
+                        <div class="profile-stat">
+                            <span class="profile-stat-label">Hoard Share:</span>
+                            <span class="profile-stat-value">${percentOfTotal}%</span>
                         </div>
                     </div>
+                    
+                    <button class="profile-close" onclick="closeDwarfProfile()">
+                        CLOSE
+                    </button>
                 </div>
-            `;
-            
-            document.body.insertAdjacentHTML('beforeend', modalHTML);
-            document.body.style.overflow = 'hidden';
-        }
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    document.body.style.overflow = 'hidden';
+}
 
         function closeDwarfProfile(event) {
             if (event && event.target.className !== 'profile-modal active') return;
