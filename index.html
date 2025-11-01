@@ -928,7 +928,8 @@
                     }
                 }
                 
-                const ledgerUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=The%20Great%20Ledger&range=K2:K5`;
+                // UPDATED: Fetch from Metal Prices sheet, B2:B7
+                const ledgerUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Metal%20Prices&range=B2:B7`;
                 const pricesResponse = await fetch(ledgerUrl);
                 const pricesText = await pricesResponse.text();
                 const pricesJsonMatch = pricesText.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
@@ -936,15 +937,18 @@
                 
                 const pricesRows = pricesJson.table.rows;
                 
-                if (!pricesRows || pricesRows.length < 4) {
+                if (!pricesRows || pricesRows.length < 6) {
                     throw new Error('Not enough price data in sheet');
                 }
                 
+                // UPDATED: Include new silver types
                 const prices = {
                     copper: parseFloat(pricesRows[0].c[0].v),
-                    silver: parseFloat(pricesRows[1].c[0].v),
-                    gold: parseFloat(pricesRows[2].c[0].v),
-                    platinum: parseFloat(pricesRows[3].c[0].v)
+                    silver999: parseFloat(pricesRows[1].c[0].v),
+                    silver925: parseFloat(pricesRows[2].c[0].v),
+                    silver900: parseFloat(pricesRows[3].c[0].v),
+                    gold: parseFloat(pricesRows[4].c[0].v),
+                    platinum: parseFloat(pricesRows[5].c[0].v)
                 };
                 
                 displayHoard(metals, prices);
@@ -970,8 +974,16 @@
                     value = weight * prices.copper * 0.999;
                     emoji = '🟤';
                 } else if (metalLower.includes('silver')) {
-                    value = weight * prices.silver * 0.999;
                     emoji = '⚪';
+                    // UPDATED: Detect silver purity
+                    if (metalLower.includes('.925') || metalLower.includes('925')) {
+                        value = weight * prices.silver925 * 0.999;
+                    } else if (metalLower.includes('.900') || metalLower.includes('900')) {
+                        value = weight * prices.silver900 * 0.999;
+                    } else {
+                        // Assume .999
+                        value = weight * prices.silver999 * 0.999;
+                    }
                 } else if (metalLower.includes('gold')) {
                     value = weight * prices.gold * 0.999;
                     emoji = '🟡';
@@ -1017,9 +1029,10 @@
                 
                 for (let i = 1; i < rows.length; i++) {
                     const cells = rows[i].c;
-                    if (cells && cells[1] && cells[7]) {
+                    // UPDATED: Glory Points moved from column H (cells[7]) to column J (cells[9])
+                    if (cells && cells[1] && cells[9]) {
                         const dwarfName = cells[1].v;
-                        const gloryPoints = parseFloat(cells[7].v) || 0;
+                        const gloryPoints = parseFloat(cells[9].v) || 0;
                         
                         if (dwarfName && !dwarfName.toLowerCase().includes('hoard') && gloryPoints > 0) {
                             dwarves.push({
@@ -1125,70 +1138,71 @@
                 });
             }
             
-            // Make dwarf names clickable - FIXED: Now inside the function
+            // Make dwarf names clickable
             makeNamesClickable();
         }
         
         // DWARF PROFILE MODAL SYSTEM
-function showDwarfProfile(dwarfName) {
-    // Find the dwarf's data
-    const dwarf = allDwarves.find(d => d.name === dwarfName);
-    if (!dwarf) return;
-    
-    // Calculate their rank
-    const rank = allDwarves.findIndex(d => d.name === dwarfName) + 1;
-    
-    // Determine rank badge emoji
-    let rankBadge = '';
-    if (rank === 1) rankBadge = '🥇';
-    else if (rank === 2) rankBadge = '🥈';
-    else if (rank === 3) rankBadge = '🥉';
-    else rankBadge = `#${rank}`;
-    
-    // Calculate percentages for context
-    const totalGP = allDwarves.reduce((sum, d) => sum + d.gp, 0);
-    const percentOfTotal = totalGP > 0 ? ((dwarf.gp / totalGP) * 100).toFixed(1) : 0;
-    
-    // Build the modal HTML
-    const modalHTML = `
-        <div class="profile-modal active" id="dwarfProfileModal" onclick="closeDwarfProfile(event)">
-            <div class="profile-content" onclick="event.stopPropagation()">
-                <div class="profile-header">
-                    <h2 class="profile-name">⚒ ${dwarf.name} ⚒</h2>
-                </div>
-                
-                <div class="profile-body">
-                    <div class="profile-section">
-                        <div class="profile-section-title">🏆 RANK & GLORY 🏆</div>
-                        <div class="profile-rank-badge">${rankBadge}</div>
-                        <div class="profile-stat">
-                            <span class="profile-stat-label">Glory Points:</span>
-                            <span class="profile-stat-value">${dwarf.gp.toFixed(2)} GP</span>
+        function showDwarfProfile(dwarfName) {
+            // Find the dwarf's data
+            const dwarf = allDwarves.find(d => d.name === dwarfName);
+            if (!dwarf) return;
+            
+            // Calculate their rank
+            const rank = allDwarves.findIndex(d => d.name === dwarfName) + 1;
+            
+            // Determine rank badge emoji
+            let rankBadge = '';
+            if (rank === 1) rankBadge = '🥇';
+            else if (rank === 2) rankBadge = '🥈';
+            else if (rank === 3) rankBadge = '🥉';
+            else rankBadge = `#${rank}`;
+            
+            // Calculate percentages for context
+            const totalGP = allDwarves.reduce((sum, d) => sum + d.gp, 0);
+            const percentOfTotal = totalGP > 0 ? ((dwarf.gp / totalGP) * 100).toFixed(1) : 0;
+            
+            // Build the modal HTML
+            const modalHTML = `
+                <div class="profile-modal active" id="dwarfProfileModal" onclick="closeDwarfProfile(event)">
+                    <div class="profile-content" onclick="event.stopPropagation()">
+                        <div class="profile-header">
+                            <h2 class="profile-name">⚒ ${dwarf.name} ⚒</h2>
                         </div>
-                        <div class="profile-stat">
-                            <span class="profile-stat-label">Rank:</span>
-                            <span class="profile-stat-value">#${rank} of ${allDwarves.length}</span>
-                        </div>
-                        <div class="profile-stat">
-                            <span class="profile-stat-label">Hoard Share:</span>
-                            <span class="profile-stat-value">${percentOfTotal}%</span>
+                        
+                        <div class="profile-body">
+                            <div class="profile-section">
+                                <div class="profile-section-title">🏆 RANK & GLORY 🏆</div>
+                                <div class="profile-rank-badge">${rankBadge}</div>
+                                <div class="profile-stat">
+                                    <span class="profile-stat-label">Glory Points:</span>
+                                    <span class="profile-stat-value">${dwarf.gp.toFixed(2)} GP</span>
+                                </div>
+                                <div class="profile-stat">
+                                    <span class="profile-stat-label">Rank:</span>
+                                    <span class="profile-stat-value">#${rank} of ${allDwarves.length}</span>
+                                </div>
+                                <div class="profile-stat">
+                                    <span class="profile-stat-label">Hoard Share:</span>
+                                    <span class="profile-stat-value">${percentOfTotal}%</span>
+                                </div>
+                            </div>
+                            
+                            <button class="profile-close" onclick="closeDwarfProfile()">
+                                CLOSE
+                            </button>
                         </div>
                     </div>
-                    
-                    <button class="profile-close" onclick="closeDwarfProfile()">
-                        CLOSE
-                    </button>
                 </div>
-            </div>
-        </div>
-    `;
-    
-    // Add to page
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-    
-    // Prevent body scroll when modal is open
-    document.body.style.overflow = 'hidden';
-}
+            `;
+            
+            // Add to page
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            
+            // Prevent body scroll when modal is open
+            document.body.style.overflow = 'hidden';
+        }
+
         function closeDwarfProfile(event) {
             // Only close if clicking the backdrop or close button
             if (event && event.target.className !== 'profile-modal active') return;
