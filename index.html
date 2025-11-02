@@ -95,7 +95,7 @@
 
         /* Keep top 3 visible in night mode */
         [data-theme="night"] .dwarf-row.top-three {
-            background: #5F7892;
+            background: #92400e;
             border-color: var(--gold-dark);
             color: #fef3c7;
         }
@@ -1115,6 +1115,36 @@
             padding: 30px;
         }
 
+        .profile-photo-container {
+            text-align: center;
+            margin: 0 0 20px 0;
+            padding: 15px;
+            background: var(--panel-dark);
+            border: 3px solid var(--border-dark);
+            box-shadow: inset 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .profile-photo {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border: 5px solid var(--border-dark);
+            box-shadow: 
+                0 0 0 2px var(--border-medium),
+                4px 4px 0 var(--border-dark),
+                0 8px 16px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .profile-photo-label {
+            margin-top: 10px;
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
         .profile-section {
             background: var(--panel-bg);
             border: 4px solid var(--border-dark);
@@ -1396,7 +1426,7 @@
             }
             
             .profile-name {
-                font-size: 1.8em !important;
+                font-size: 1.5em !important;
                 letter-spacing: 2px;
             }
 
@@ -1565,6 +1595,7 @@
         // Global state for leaderboard
         let allDwarves = [];
         let currentPage = 1;
+        let photoAssignmentsCache = null;
         
         // ROTATING QUOTES
         const FELLOWSHIP_QUOTES = [
@@ -1654,6 +1685,53 @@
             });
             html += '</div>';
             return html;
+        }
+
+        // Fetch photo assignments from Google Sheets
+        async function fetchPhotoAssignments() {
+            try {
+                const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Dwarf%20Photos`;
+                const response = await fetch(sheetUrl);
+                const text = await response.text();
+                
+                const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
+                const json = jsonMatch ? JSON.parse(jsonMatch[1]) : JSON.parse(text.substr(47).slice(0, -2));
+                
+                const rows = json.table.rows;
+                const assignments = {};
+                
+                // Build assignments object from sheet
+                for (let i = 0; i < rows.length; i++) {
+                    const cells = rows[i].c;
+                    if (cells && cells[0] && cells[1]) {
+                        const dwarfName = cells[0].v;
+                        const photoFilename = cells[1].v;
+                        if (dwarfName && photoFilename) {
+                            assignments[dwarfName] = photoFilename;
+                        }
+                    }
+                }
+                
+                photoAssignmentsCache = assignments;
+                console.log('Loaded photo assignments:', assignments);
+                return assignments;
+                
+            } catch (error) {
+                console.error('Error fetching photo assignments:', error);
+                photoAssignmentsCache = {};
+                return {};
+            }
+        }
+
+        // Get photo for a dwarf (from cache)
+        async function getPhotoForDwarf(dwarfName) {
+            // Load assignments if not cached
+            if (photoAssignmentsCache === null) {
+                await fetchPhotoAssignments();
+            }
+            
+            // Return photo if assigned, otherwise return null
+            return photoAssignmentsCache[dwarfName] || null;
         }
 
         // Application Modal Functions
@@ -1952,7 +2030,7 @@
         }
         
         // DWARF PROFILE MODAL SYSTEM
-        function showDwarfProfile(dwarfName) {
+        async function showDwarfProfile(dwarfName) {
             const dwarf = allDwarves.find(d => d.name === dwarfName);
             if (!dwarf) return;
             
@@ -1965,6 +2043,22 @@
             const badges = getBadgeStatus(dwarf.gp);
             const badgeHTML = generateBadgeHTML(badges);
             
+            // Get assigned photo for this dwarf (async)
+            const photoFilename = await getPhotoForDwarf(dwarfName);
+            const photoPath = photoFilename ? `dwarfphotos/${photoFilename}` : null;
+            
+            // Build photo HTML
+            let photoHTML = '';
+            if (photoPath) {
+                photoHTML = `
+                    <div class="profile-photo-container">
+                        <img src="${photoPath}" alt="${dwarf.name}" class="profile-photo" 
+                             onerror="this.style.display='none'; this.nextElementSibling.textContent='Portrait unavailable';">
+                        <div class="profile-photo-label">Portrait of ${dwarf.name}</div>
+                    </div>
+                `;
+            }
+            
             const modalHTML = `
                 <div class="profile-modal active" id="dwarfProfileModal" onclick="closeDwarfProfile(event)">
                     <div class="profile-content" onclick="event.stopPropagation()">
@@ -1973,6 +2067,8 @@
                         </div>
                         
                         <div class="profile-body">
+                            ${photoHTML}
+                            
                             <div class="profile-section">
                                 <div class="profile-section-title">⚒️ TITLE & BADGES ⚒️</div>
                                 <div class="profile-rank-badge">${titleEmoji} ${dwarf.title}</div>
@@ -2031,6 +2127,7 @@
         // Initialize everything
         initTheme();
         displayRandomQuote();
+        fetchPhotoAssignments(); // Preload photo assignments
         fetchHoardData();
         fetchLeaderboard();
         
