@@ -458,12 +458,12 @@
             font-weight: bold;
         }
         
-        .discord-button {
+        .apply-button {
             display: inline-block;
-            margin: 30px auto;
+            margin: 30px auto 10px auto;
             padding: 15px 40px;
-            background: linear-gradient(180deg, #7289da 0%, #5865f2 100%);
-            color: white;
+            background: linear-gradient(180deg, #8b6f47 0%, #5d4a36 100%);
+            color: #ffd700;
             text-decoration: none;
             font-size: 1.3em;
             font-weight: bold;
@@ -474,15 +474,30 @@
             transition: all 0.1s;
         }
         
-        .discord-button:hover {
-            background: linear-gradient(180deg, #8b9fe8 0%, #6b7bff 100%);
+        .apply-button:hover {
+            background: linear-gradient(180deg, #a0805a 0%, #6b5943 100%);
             transform: translate(2px, 2px);
             box-shadow: 2px 2px 0 #3d2817;
         }
         
-        .discord-button:active {
+        .apply-button:active {
             transform: translate(4px, 4px);
             box-shadow: none;
+        }
+
+        .discord-link {
+            display: block;
+            text-align: center;
+            margin: 10px auto 20px auto;
+            color: #5d4a36;
+            font-size: 0.9em;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .discord-link:hover {
+            color: #7289da;
+            text-decoration: underline;
         }
         
         .button-container {
@@ -531,6 +546,106 @@
             background: #4a3829;
         }
         
+        /* Application Modal */
+        .application-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .application-modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .application-content {
+            background: #c9b896;
+            background-image: 
+                radial-gradient(rgba(0,0,0,.1) 1px, transparent 1px),
+                radial-gradient(rgba(0,0,0,.1) 1px, transparent 1px);
+            background-size: 4px 4px;
+            background-position: 0 0, 2px 2px;
+            border: 8px solid #3d2817;
+            box-shadow: 
+                0 0 0 2px #8b6f47,
+                inset 0 0 0 2px #8b6f47,
+                0 20px 60px rgba(0,0,0,0.9);
+            padding: 0;
+            max-width: 800px;
+            width: 95%;
+            max-height: 90vh;
+            overflow: hidden;
+            position: relative;
+            animation: slideDown 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .application-header {
+            background: linear-gradient(180deg, #8b6f47 0%, #5d4a36 100%);
+            border-bottom: 4px solid #3d2817;
+            padding: 20px;
+            text-align: center;
+            box-shadow: inset 0 -4px 8px rgba(0,0,0,0.3);
+            flex-shrink: 0;
+        }
+
+        .application-title {
+            font-family: 'MedievalSharp', 'Courier New', monospace;
+            font-size: 2em;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 
+                3px 3px 0 #3d2817,
+                4px 4px 10px rgba(0,0,0,0.8);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .application-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        .application-body iframe {
+            width: 100%;
+            height: 100%;
+            min-height: 600px;
+            border: none;
+        }
+
+        .application-close {
+            background: linear-gradient(180deg, #8b6f47 0%, #5d4a36 100%);
+            border: 4px solid #3d2817;
+            border-left: none;
+            border-right: none;
+            border-bottom: none;
+            color: #ffd700;
+            padding: 15px;
+            cursor: pointer;
+            font-family: 'MedievalSharp', 'Courier New', monospace;
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            width: 100%;
+            flex-shrink: 0;
+        }
+
+        .application-close:hover {
+            background: linear-gradient(180deg, #a0805a 0%, #6b5943 100%);
+        }
+
         /* Dwarf Profile Modal */
         .profile-modal {
             display: none;
@@ -604,7 +719,6 @@
             box-shadow: 
                 inset 2px 2px 4px rgba(0,0,0,0.2),
                 2px 2px 0 #8b6f47;
-            text-align: center;
         }
 
         .profile-section-title {
@@ -643,7 +757,7 @@
         }
 
         .profile-rank-badge {
-            display: inline-block;
+            display: block;
             font-size: 1.8em;
             margin: 10px 0;
             text-align: center;
@@ -662,7 +776,6 @@
         }
 
         .badge {
-            font-size: 2.5em;
             text-align: center;
             padding: 15px 10px;
             border: 3px solid #8b6f47;
@@ -672,9 +785,20 @@
             transition: all 0.3s ease;
         }
 
+        .badge img {
+            width: 60px;
+            height: 60px;
+            display: block;
+            margin: 0 auto;
+        }
+
         .badge.locked {
             opacity: 0.3;
             filter: grayscale(100%) brightness(0.7);
+        }
+
+        .badge.locked img {
+            content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="40" fill="%23999">❌</text></svg>');
         }
 
         .badge.unlocked {
@@ -701,9 +825,9 @@
         }
 
         .badge-name {
-            font-size: 0.35em;
+            font-size: 0.75em;
             color: #5d4a36;
-            margin-top: 5px;
+            margin-top: 8px;
             font-weight: bold;
             text-align: center;
         }
@@ -847,7 +971,7 @@
                 padding: 15px;
             }
             
-            .discord-button {
+            .apply-button {
                 font-size: 1.1em;
                 padding: 12px 30px;
             }
@@ -857,7 +981,7 @@
                 padding: 15px;
             }
             
-            /* Mobile adjustments for modal */
+            /* Mobile adjustments for profile modal */
             .profile-content {
                 width: 95%;
                 max-height: 90vh;
@@ -888,12 +1012,31 @@
             }
 
             .badge {
-                font-size: 2em;
                 padding: 10px 5px;
             }
 
+            .badge img {
+                width: 50px;
+                height: 50px;
+            }
+
             .badge-name {
-                font-size: 0.3em;
+                font-size: 0.65em;
+            }
+
+            /* Mobile adjustments for application modal */
+            .application-content {
+                width: 100%;
+                max-height: 95vh;
+            }
+
+            .application-title {
+                font-size: 1.3em;
+                letter-spacing: 2px;
+            }
+
+            .application-body iframe {
+                min-height: 500px;
             }
         }
 
@@ -966,8 +1109,11 @@
             </div>
             
             <div class="button-container">
-                <a href="https://discord.gg/R2WTXwbYah" class="discord-button" target="_blank">
-                    JOIN THE FELLOWSHIP
+                <button class="apply-button" onclick="openApplicationModal()">
+                    APPLY TO JOIN THE FELLOWSHIP
+                </button>
+                <a href="https://discord.gg/R2WTXwbYah" class="discord-link" target="_blank">
+                    Already a member? Join our Discord →
                 </a>
             </div>
             
@@ -982,14 +1128,14 @@
         const SHEET_ID = '1-LJvYKvw0Pgt6vCA6aSFROMwsmY3JLraujWUSVbpAd8';
         const DWARVES_PER_PAGE = 10;
         
-        // Badge System - 6 badges (2 rows x 3 columns)
+        // Badge System - 6 badges (2 rows x 3 columns) with images
         const BADGES = [
-            { title: "Copper Collector", emoji: "🔶", threshold: 10 },
-            { title: "Bronze Hauler", emoji: "🟤", threshold: 50 },
-            { title: "Silver Seeker", emoji: "⚪", threshold: 100 },
-            { title: "Hoard Builder", emoji: "🏗️", threshold: 500 },
-            { title: "Elder Champion", emoji: "⚔️", threshold: 1000 },
-            { title: "Gold Guardian", emoji: "🟡", threshold: 5000 }
+            { title: "Copper Collector", image: "copperbadge.png", threshold: 10 },
+            { title: "Bronze Hauler", image: "bronzebadge.png", threshold: 50 },
+            { title: "Silver Seeker", image: "silverbadge.png", threshold: 100 },
+            { title: "Hoard Builder", image: "hoardbuilderbadge.png", threshold: 500 },
+            { title: "Elder Champion", image: "elderchampionbadge.png", threshold: 1000 },
+            { title: "Gold Guardian", image: "goldbadge.png", threshold: 5000 }
         ];
         
         // Global state for leaderboard
@@ -1070,21 +1216,57 @@
             }));
         }
 
-        // Generate badge HTML
+        // Generate badge HTML with images
         function generateBadgeHTML(badges) {
             let html = '<div class="badge-grid">';
             badges.forEach(badge => {
                 const statusClass = badge.unlocked ? 'unlocked' : 'locked';
-                const displayEmoji = badge.unlocked ? badge.emoji : '❌';
                 html += `
                     <div class="badge ${statusClass}">
-                        <div>${displayEmoji}</div>
+                        <img src="${badge.image}" alt="${badge.title}">
                         <div class="badge-name">${badge.title}</div>
                     </div>
                 `;
             });
             html += '</div>';
             return html;
+        }
+
+        // Application Modal Functions
+        function openApplicationModal() {
+            const modalHTML = `
+                <div class="application-modal active" id="applicationModal" onclick="closeApplicationModal(event)">
+                    <div class="application-content" onclick="event.stopPropagation()">
+                        <div class="application-header">
+                            <h2 class="application-title">⚒ FELLOWSHIP APPLICATION ⚒</h2>
+                        </div>
+                        
+                        <div class="application-body">
+                            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScPLUOLOUzXK2vJF8q7oNlCnAMXCBqffq86Xl45qL_ES8f7oQ/viewform?embedded=true">
+                                Loading…
+                            </iframe>
+                        </div>
+                        
+                        <button class="application-close" onclick="closeApplicationModal()">
+                            CLOSE
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeApplicationModal(event) {
+            if (event && event.target.id !== 'applicationModal') return;
+            
+            const modal = document.getElementById('applicationModal');
+            if (modal) {
+                modal.remove();
+            }
+            
+            document.body.style.overflow = 'auto';
         }
         
         async function fetchHoardData() {
@@ -1311,61 +1493,61 @@
             makeNamesClickable();
         }
         
-// DWARF PROFILE MODAL SYSTEM
-function showDwarfProfile(dwarfName) {
-    const dwarf = allDwarves.find(d => d.name === dwarfName);
-    if (!dwarf) return;
-    
-    const rank = allDwarves.findIndex(d => d.name === dwarfName) + 1;
-    
-    const totalGP = allDwarves.reduce((sum, d) => sum + d.gp, 0);
-    const percentOfTotal = totalGP > 0 ? ((dwarf.gp / totalGP) * 100).toFixed(1) : 0;
-    
-    const titleEmoji = getTitleEmoji(dwarf.title);
-    const badges = getBadgeStatus(dwarf.gp);
-    const badgeHTML = generateBadgeHTML(badges);
-    
-    const modalHTML = `
-        <div class="profile-modal active" id="dwarfProfileModal" onclick="closeDwarfProfile(event)">
-            <div class="profile-content" onclick="event.stopPropagation()">
-                <div class="profile-header">
-                    <h2 class="profile-name">⚒ ${dwarf.name} ⚒</h2>
-                </div>
-                
-                <div class="profile-body">
-                    <div class="profile-section">
-                        <div class="profile-section-title">⚒️ TITLE & BADGES ⚒️</div>
-                        <div class="profile-rank-badge">${titleEmoji} ${dwarf.title}</div>
-                        ${badgeHTML}
+        // DWARF PROFILE MODAL SYSTEM
+        function showDwarfProfile(dwarfName) {
+            const dwarf = allDwarves.find(d => d.name === dwarfName);
+            if (!dwarf) return;
+            
+            const rank = allDwarves.findIndex(d => d.name === dwarfName) + 1;
+            
+            const totalGP = allDwarves.reduce((sum, d) => sum + d.gp, 0);
+            const percentOfTotal = totalGP > 0 ? ((dwarf.gp / totalGP) * 100).toFixed(1) : 0;
+            
+            const titleEmoji = getTitleEmoji(dwarf.title);
+            const badges = getBadgeStatus(dwarf.gp);
+            const badgeHTML = generateBadgeHTML(badges);
+            
+            const modalHTML = `
+                <div class="profile-modal active" id="dwarfProfileModal" onclick="closeDwarfProfile(event)">
+                    <div class="profile-content" onclick="event.stopPropagation()">
+                        <div class="profile-header">
+                            <h2 class="profile-name">⚒ ${dwarf.name} ⚒</h2>
+                        </div>
+                        
+                        <div class="profile-body">
+                            <div class="profile-section">
+                                <div class="profile-section-title">⚒️ TITLE & BADGES ⚒️</div>
+                                <div class="profile-rank-badge">${titleEmoji} ${dwarf.title}</div>
+                                ${badgeHTML}
+                            </div>
+                            
+                            <div class="profile-section">
+                                <div class="profile-section-title">🏆 RANK & GLORY 🏆</div>
+                                <div class="profile-stat">
+                                    <span class="profile-stat-label">Glory Points:</span>
+                                    <span class="profile-stat-value">${dwarf.gp.toFixed(2)} GP</span>
+                                </div>
+                                <div class="profile-stat">
+                                    <span class="profile-stat-label">Rank:</span>
+                                    <span class="profile-stat-value">#${rank} of ${allDwarves.length}</span>
+                                </div>
+                                <div class="profile-stat">
+                                    <span class="profile-stat-label">Hoard Share:</span>
+                                    <span class="profile-stat-value">${percentOfTotal}%</span>
+                                </div>
+                            </div>
+                            
+                            <button class="profile-close" onclick="closeDwarfProfile()">
+                                CLOSE
+                            </button>
+                        </div>
                     </div>
-                    
-                    <div class="profile-section">
-                        <div class="profile-section-title">🏆 RANK & GLORY 🏆</div>
-                        <div class="profile-stat">
-                            <span class="profile-stat-label">Glory Points:</span>
-                            <span class="profile-stat-value">${dwarf.gp.toFixed(2)} GP</span>
-                        </div>
-                        <div class="profile-stat">
-                            <span class="profile-stat-label">Rank:</span>
-                            <span class="profile-stat-value">#${rank} of ${allDwarves.length}</span>
-                        </div>
-                        <div class="profile-stat">
-                            <span class="profile-stat-label">Hoard Share:</span>
-                            <span class="profile-stat-value">${percentOfTotal}%</span>
-                        </div>
-                    </div>
-                    
-                    <button class="profile-close" onclick="closeDwarfProfile()">
-                        CLOSE
-                    </button>
                 </div>
-            </div>
-        </div>
-    `;
-    
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-    document.body.style.overflow = 'hidden';
-}
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            document.body.style.overflow = 'hidden';
+        }
 
         function closeDwarfProfile(event) {
             if (event && event.target.className !== 'profile-modal active') return;
