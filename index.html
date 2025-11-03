@@ -605,7 +605,7 @@
         .intro {
             background: transparent;
             border: none;
-            padding: 120px 60px 120px 60px; /* ← ADJUST: Top/bottom padding for cap overlap */
+            padding: 120px 80px 120px 80px; /* ← ADJUST: Top/bottom padding for cap overlap */
             margin: 40px 0;
             font-size: 0.95em;
             line-height: 1.7;
@@ -625,6 +625,7 @@
             background: url('scroll-top.png') no-repeat center top;
             background-size: 100% auto;
             z-index: 3; /* above middle */
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
             pointer-events: none;
         }
 
@@ -638,6 +639,7 @@
             background: url('scroll-bottom.png') no-repeat center bottom;
             background-size: 99.5% auto;
             z-index: 2; /* above middle */
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
             pointer-events: none;
         }
 
@@ -652,6 +654,7 @@
             background: url('scroll-middle.png') repeat-y center top;
             background-size: 91% auto;
             z-index: 1; /* behind the caps so dithered edges overlap */
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
         }
 
         /* Make text sit above everything */
