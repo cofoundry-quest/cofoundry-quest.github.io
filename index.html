@@ -623,7 +623,7 @@
             right: 0;
             height: 150px; /* ← ADJUST: Based on your scroll-top.png height */
             background: url('scroll-top.png') no-repeat center top;
-            background-size: cover;
+            background-size: 100% auto;
             z-index: 3; /* above middle */
             pointer-events: none;
         }
@@ -636,7 +636,7 @@
             right: 0;
             height: 150px; /* ← ADJUST: Based on your scroll-bottom.png height */
             background: url('scroll-bottom.png') no-repeat center bottom;
-            background-size: cover;
+            background-size: 100% auto;
             z-index: 2; /* above middle */
             pointer-events: none;
         }
@@ -650,7 +650,7 @@
             right: 0;
             bottom: 60px; /* ← ADJUST: How much the middle overlaps the bottom cap */
             background: url('scroll-middle.png') repeat-y center top;
-            background-size: 100% auto;
+            background-size: 90% auto;
             z-index: 1; /* behind the caps so dithered edges overlap */
         }
 
