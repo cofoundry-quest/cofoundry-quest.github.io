@@ -613,6 +613,7 @@
             position: relative;
             color: #2d1810;
             min-height: 200px;
+            drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)); /* Shadow */
         }
 
         /* Top scroll cap (BEHIND the middle parchment) */
@@ -625,7 +626,6 @@
             background: url('scroll-top.png') no-repeat center top;
             background-size: 100% auto;
             z-index: 3; /* above middle */
-            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
             pointer-events: none;
         }
 
@@ -639,7 +639,6 @@
             background: url('scroll-bottom.png') no-repeat center bottom;
             background-size: 99.5% auto;
             z-index: 2; /* above middle */
-            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
             pointer-events: none;
         }
 
@@ -654,7 +653,6 @@
             background: url('scroll-middle.png') repeat-y center top;
             background-size: 91% auto;
             z-index: 1; /* behind the caps so dithered edges overlap */
-            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
         }
 
         /* Make text sit above everything */
@@ -671,6 +669,7 @@
         /* Night mode adjustments */
         [data-theme="night"] .intro {
             color: #e8d4b0;
+            drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6)); /* Shadow */
         }
 
         /* Night mode - darken/adjust scroll images */
@@ -678,10 +677,9 @@
 [data-theme="night"] .intro-scroll-bottom,
 [data-theme="night"] .intro::before {
     filter: 
-        brightness(0.7)        /* Darkens the scroll */
+        brightness(0.5)        /* Darkens the scroll */
         contrast(1.1)          /* Adds contrast */
         sepia(0.2)            /* Adds slight sepia tone */
-        drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6)); /* Shadow */
 }
 
         /* Mobile scroll adjustments */
