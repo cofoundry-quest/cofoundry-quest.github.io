@@ -645,10 +645,10 @@
         .intro::before {
             content: '';
             position: absolute;
-            top: 0px;    /* ← ADJUST: How much the middle overlaps the top cap */
+            top: 100px;    /* ← ADJUST: How much the middle overlaps the top cap */
             left: 10;
             right: 10;
-            bottom: 0px; /* ← ADJUST: How much the middle overlaps the bottom cap */
+            bottom: 100px; /* ← ADJUST: How much the middle overlaps the bottom cap */
             background: url('scroll-middle.png') repeat-y center top;
             background-size: 100% auto;
             z-index: 1; /* behind the caps so dithered edges overlap */
@@ -682,8 +682,8 @@
             }
             
             .intro::before {
-                top: 0px;    /* ← ADJUST: Mobile overlap values */
-                bottom: 0px;
+                top: 80px;    /* ← ADJUST: Mobile overlap values */
+                bottom: 80px;
             }
         }
         
