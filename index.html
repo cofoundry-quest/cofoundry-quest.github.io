@@ -673,6 +673,17 @@
             color: #e8d4b0;
         }
 
+        /* Night mode - darken/adjust scroll images */
+[data-theme="night"] .intro-scroll-top,
+[data-theme="night"] .intro-scroll-bottom,
+[data-theme="night"] .intro::before {
+    filter: 
+        brightness(0.7)        /* Darkens the scroll */
+        contrast(1.1)          /* Adds contrast */
+        sepia(0.2)            /* Adds slight sepia tone */
+        drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6)); /* Shadow */
+}
+
         /* Mobile scroll adjustments */
         @media (max-width: 768px) {
             .intro {
