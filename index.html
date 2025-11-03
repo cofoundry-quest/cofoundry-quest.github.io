@@ -494,10 +494,28 @@
         .header {
             background: linear-gradient(180deg, var(--border-medium) 0%, var(--border-light) 100%);
             border-bottom: 4px solid var(--border-dark);
-            padding: 30px 20px;
+            padding: 0;
             text-align: center;
             box-shadow: inset 0 -4px 8px rgba(0,0,0,0.3);
             transition: background 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header-banner {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-width: 100%;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Hide the old text elements when using banner */
+        .header h1,
+        .header .quest-text,
+        .header .quest-separator,
+        .header .subtitle {
+            display: none;
         }
         
         h1 {
@@ -559,6 +577,21 @@
             background: var(--border-light);
             margin: 15px auto;
             box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* Responsive banner adjustments */
+        @media (max-width: 768px) {
+            .header-banner {
+                max-height: 200px;
+                object-fit: cover;
+                object-position: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header-banner {
+                max-height: 150px;
+            }
         }
         
         .content-area {
@@ -1327,7 +1360,7 @@
             }
             
             .header {
-                padding: 20px 15px;
+                padding: 0;
             }
             
             h1 {
@@ -1533,10 +1566,7 @@
     
     <div class="container">
         <div class="header">
-            <h1>⚒ COFOUNDRY ⚒</h1>
-            <div class="quest-text">QUEST</div>
-            <div class="quest-separator"></div>
-            <p class="subtitle">Home of the Valorforge</p>
+            <img src="landscapebannerday.jpg" alt="Cofoundry Quest - The Valorforge" class="header-banner" id="header-banner">
         </div>
         
         <div class="content-area">
@@ -1797,6 +1827,16 @@
                     torch.src = 'unlittorch.png';
                 }
             });
+            
+            // Update header banner
+            const banner = document.getElementById('header-banner');
+            if (banner) {
+                if (theme === 'day') {
+                    banner.src = 'landscapebannerday.jpg';
+                } else {
+                    banner.src = 'landscapebannernight.jpg';
+                }
+            }
         }
 
         function toggleTheme() {
