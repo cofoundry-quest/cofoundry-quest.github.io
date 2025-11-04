@@ -2045,9 +2045,9 @@
                 
                 if (metalLower.includes('copper')) {
                     value = weight * prices.copper * 0.999;
-                    icon = '<img src="copperingot.png" alt="Copper" class="metal-icon">';
+                    icon = '<img src="copperbar.png" alt="Copper" class="metal-icon">';
                 } else if (metalLower.includes('silver')) {
-                    icon = '<img src="silveringot.png" alt="Silver" class="metal-icon">';
+                    icon = '<img src="silverbar.png" alt="Silver" class="metal-icon">';
                     if (metalLower.includes('.925') || metalLower.includes('925')) {
                         value = weight * prices.silver925 * 0.999;
                     } else if (metalLower.includes('.900') || metalLower.includes('900')) {
@@ -2057,13 +2057,13 @@
                     }
                 } else if (metalLower.includes('gold')) {
                     value = weight * prices.gold * 0.999;
-                    icon = '<img src="goldingot.png" alt="Gold" class="metal-icon">';
+                    icon = '<img src="goldbar.png" alt="Gold" class="metal-icon">';
                 } else if (metalLower.includes('platinum')) {
                     value = weight * prices.platinum * 0.999;
-                    icon = '<img src="silveringot.png" alt="Platinum" class="metal-icon">';
+                    icon = '<img src="silverbar.png" alt="Platinum" class="metal-icon">';
                 } else if (metalLower.includes('vulgar') || metalLower.includes('currency')) {
                     value = weight;
-                    icon = '<img src="stackedcoins.png" alt="Currency" class="metal-icon">';
+                    icon = '<img src="vulgarcurrency.png" alt="Currency" class="metal-icon">';
                     unit = 'USD';
                 }
                 
@@ -2079,7 +2079,7 @@
             
             html += `
                 <div class="total-value">
-                    <img src="moneybag.png" alt="Value" class="value-icon"> Estimated Value: $${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                    <img src="estimatedvalue.png" alt="Value" class="value-icon"> Estimated Value: $${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                 </div>
             `;
             
