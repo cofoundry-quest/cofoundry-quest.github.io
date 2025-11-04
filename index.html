@@ -753,6 +753,18 @@
             background: var(--container-bg);
         }
 
+        .trophy-icon {
+    height: 1.4em;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 10px;
+}
+
+.trophy-right {
+    transform: scaleX(-1);
+}
+        
         .dwarf-row {
             background: var(--panel-dark);
             border: 3px solid var(--border-dark);
@@ -1685,7 +1697,9 @@
             </div>
             
             <div class="panel">
-                <div class="panel-title">🏆 LEADERBOARD 🏆</div>
+              <img src="leaderboardtrophy.png" alt="Trophy" class="trophy-icon trophy-left">
+              LEADERBOARD
+              <img src="leaderboardtrophy.png" alt="Trophy" class="trophy-icon trophy-right">
                 <div id="leaderboard-data" class="loading">Loading Leaderboard...</div>
             </div>
             
