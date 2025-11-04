@@ -1249,6 +1249,17 @@
             letter-spacing: 3px;
             text-transform: uppercase;
             margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Profile modal icon styles */
+        .profile-name-icon {
+            height: 1.2em;
+            width: auto;
+            display: block;
         }
 
         .profile-body {
@@ -1305,6 +1316,16 @@
             text-shadow: 1px 1px 0 var(--gold-text);
             letter-spacing: 2px;
             text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .section-title-icon {
+            height: 1.2em;
+            width: auto;
+            display: block;
         }
 
         .profile-stat {
@@ -1335,10 +1356,19 @@
         }
 
         .profile-rank-badge {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             font-size: 1.8em;
             margin: 10px 0;
             text-align: center;
+        }
+
+        .title-badge-icon {
+            height: 1.2em;
+            width: auto;
+            display: block;
         }
 
         .badge-grid {
@@ -1574,9 +1604,21 @@
                 letter-spacing: 2px;
             }
 
+            .profile-name-icon {
+                height: 1em;
+            }
+
+            .section-title-icon {
+                height: 1em;
+            }
+
             .profile-rank-badge {
                 font-size: 1.3em !important;
                 margin: 5px 0;
+            }
+
+            .title-badge-icon {
+                height: 1em;
             }
             
             .profile-body {
@@ -1786,18 +1828,18 @@
             document.getElementById('random-quote').textContent = `"${quote}"`;
         }
         
-        function getTitleEmoji(title) {
-            const titleEmojis = {
-                "The Cofounder": "👑",
-                "Gold Guardian": "🟡",
-                "Elder Champion": "⚔️",
-                "Hoard Builder": "🏗️",
-                "Silver Seeker": "⚪",
-                "Bronze Hauler": "🟤",
-                "Copper Collector": "🔶",
-                "Apprentice Scrapper": "🔨"
+        function getTitleImage(title) {
+            const titleImages = {
+                "The Cofounder": "cofoundericon.png",
+                "Gold Guardian": "goldbadge.png",
+                "Elder Champion": "elderchampionbadge.png",
+                "Hoard Builder": "hoardbuilderbadge.png",
+                "Silver Seeker": "silverbadge.png",
+                "Bronze Hauler": "bronzebadge.png",
+                "Copper Collector": "copperbadge.png",
+                "Apprentice Scrapper": "apprencticeicon.png"
             };
-            return titleEmojis[title] || "⚒️";
+            return titleImages[title] || "hammer&pick.png";
         }
 
         function getBadgeStatus(dwarfGP) {
@@ -2003,9 +2045,9 @@
                 
                 if (metalLower.includes('copper')) {
                     value = weight * prices.copper * 0.999;
-                    icon = '<img src="copperbar.png" alt="Copper" class="metal-icon">';
+                    icon = '<img src="copperingot.png" alt="Copper" class="metal-icon">';
                 } else if (metalLower.includes('silver')) {
-                    icon = '<img src="silverbar.png" alt="Silver" class="metal-icon">';
+                    icon = '<img src="silveringot.png" alt="Silver" class="metal-icon">';
                     if (metalLower.includes('.925') || metalLower.includes('925')) {
                         value = weight * prices.silver925 * 0.999;
                     } else if (metalLower.includes('.900') || metalLower.includes('900')) {
@@ -2015,13 +2057,13 @@
                     }
                 } else if (metalLower.includes('gold')) {
                     value = weight * prices.gold * 0.999;
-                    icon = '<img src="goldbar.png" alt="Gold" class="metal-icon">';
+                    icon = '<img src="goldingot.png" alt="Gold" class="metal-icon">';
                 } else if (metalLower.includes('platinum')) {
                     value = weight * prices.platinum * 0.999;
-                    icon = '<img src="silverbar.png" alt="Platinum" class="metal-icon">';
+                    icon = '<img src="silveringot.png" alt="Platinum" class="metal-icon">';
                 } else if (metalLower.includes('vulgar') || metalLower.includes('currency')) {
                     value = weight;
-                    icon = '<img src="vulgarcurrency.png" alt="Currency" class="metal-icon">';
+                    icon = '<img src="stackedcoins.png" alt="Currency" class="metal-icon">';
                     unit = 'USD';
                 }
                 
@@ -2037,7 +2079,7 @@
             
             html += `
                 <div class="total-value">
-                    <img src="estimatedvalue.png" alt="Value" class="value-icon"> Estimated Value: $${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                    <img src="moneybag.png" alt="Value" class="value-icon"> Estimated Value: $${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                 </div>
             `;
             
@@ -2170,7 +2212,7 @@
             const totalGP = allDwarves.reduce((sum, d) => sum + d.gp, 0);
             const percentOfTotal = totalGP > 0 ? ((dwarf.gp / totalGP) * 100).toFixed(1) : 0;
             
-            const titleEmoji = getTitleEmoji(dwarf.title);
+            const titleImage = getTitleImage(dwarf.title);
             const badges = getBadgeStatus(dwarf.gp);
             const badgeHTML = generateBadgeHTML(badges);
             
@@ -2191,20 +2233,35 @@
                 <div class="profile-modal active" id="dwarfProfileModal" onclick="closeDwarfProfile(event)">
                     <div class="profile-content" onclick="event.stopPropagation()">
                         <div class="profile-header">
-                            <h2 class="profile-name">⚒ ${dwarf.name} ⚒</h2>
+                            <h2 class="profile-name">
+                                <img src="hammer&pick.png" alt="Tools" class="profile-name-icon">
+                                ${dwarf.name}
+                                <img src="hammer&pick.png" alt="Tools" class="profile-name-icon">
+                            </h2>
                         </div>
                         
                         <div class="profile-body">
                             ${photoHTML}
                             
                             <div class="profile-section">
-                                <div class="profile-section-title">⚒️ TITLE & BADGES ⚒️</div>
-                                <div class="profile-rank-badge">${titleEmoji} ${dwarf.title}</div>
+                                <div class="profile-section-title">
+                                    <img src="hammer&pick.png" alt="Tools" class="section-title-icon">
+                                    TITLE & BADGES
+                                    <img src="hammer&pick.png" alt="Tools" class="section-title-icon">
+                                </div>
+                                <div class="profile-rank-badge">
+                                    <img src="${titleImage}" alt="${dwarf.title}" class="title-badge-icon">
+                                    ${dwarf.title}
+                                </div>
                                 ${badgeHTML}
                             </div>
                             
                             <div class="profile-section">
-                                <div class="profile-section-title">🏆 RANK & GLORY 🏆</div>
+                                <div class="profile-section-title">
+                                    <img src="leaderboardtrophy.png" alt="Trophy" class="section-title-icon">
+                                    RANK & GLORY
+                                    <img src="leaderboardtrophy.png" alt="Trophy" class="section-title-icon">
+                                </div>
                                 <div class="profile-stat">
                                     <span class="profile-stat-label">Glory Points:</span>
                                     <span class="profile-stat-value">${dwarf.gp.toFixed(2)} GP</span>
