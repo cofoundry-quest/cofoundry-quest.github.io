@@ -732,6 +732,20 @@
             letter-spacing: 3px;
             text-transform: uppercase;
             transition: color 0.3s ease, text-shadow 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .trophy-icon {
+            height: 1.4em;
+            width: auto;
+            display: block;
+        }
+
+        .trophy-right {
+            transform: scaleX(-1);
         }
         
         .metal-row {
@@ -753,18 +767,6 @@
             background: var(--container-bg);
         }
 
-        .trophy-icon {
-    height: 1.4em;
-    width: auto;
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0 10px;
-}
-
-.trophy-right {
-    transform: scaleX(-1);
-}
-        
         .dwarf-row {
             background: var(--panel-dark);
             border: 3px solid var(--border-dark);
@@ -824,6 +826,8 @@
         
         .metal-name {
             font-weight: bold;
+            display: flex;
+            align-items: center;
         }
         
         .metal-weight {
@@ -832,46 +836,39 @@
         }
 
         /* Style for metal ingot images */
-/* Style for metal ingot images */
-.metal-icon {
-    width: 40px;
-    height: auto;
-    display: block;
-    margin-right: 8px;
-}
-
-.metal-name {
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-}
+        .metal-icon {
+            width: 40px;
+            height: auto;
+            display: block;
+            margin-right: 8px;
+        }
         
-.total-value {
-    background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dark) 100%);
-    border: 4px solid var(--border-dark);
-    padding: 20px;
-    margin-top: 20px;
-    text-align: center;
-    font-size: 1em;
-    font-weight: bold;
-    color: var(--border-dark);
-    text-shadow: 1px 1px 0 #fff;
-    box-shadow: 
-        inset 0 2px 4px rgba(255,255,255,0.5),
-        2px 2px 0 var(--border-medium);
-    transition: background 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        .total-value {
+            background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dark) 100%);
+            border: 4px solid var(--border-dark);
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1em;
+            font-weight: bold;
+            color: var(--border-dark);
+            text-shadow: 1px 1px 0 #fff;
+            box-shadow: 
+                inset 0 2px 4px rgba(255,255,255,0.5),
+                2px 2px 0 var(--border-medium);
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         /* Style for money bag image in total value */
-.value-icon {
-    width: 35px;
-    height: auto;
-    display: block;
-    margin-right: 5px;
-}
+        .value-icon {
+            width: 35px;
+            height: auto;
+            display: block;
+            margin-right: 5px;
+        }
         
         .leaderboard-stats {
             margin-top: 20px;
@@ -1511,6 +1508,10 @@
                 font-size: 1.3em;
                 letter-spacing: 2px;
             }
+
+            .trophy-icon {
+                height: 1.2em;
+            }
             
             .metal-row {
                 padding: 10px 10px 10px 20px;
@@ -1697,9 +1698,11 @@
             </div>
             
             <div class="panel">
-              <img src="leaderboardtrophy.png" alt="Trophy" class="trophy-icon trophy-left">
-              LEADERBOARD
-              <img src="leaderboardtrophy.png" alt="Trophy" class="trophy-icon trophy-right">
+                <div class="panel-title">
+                    <img src="leaderboardtrophy.png" alt="Trophy" class="trophy-icon trophy-left">
+                    LEADERBOARD
+                    <img src="leaderboardtrophy.png" alt="Trophy" class="trophy-icon trophy-right">
+                </div>
                 <div id="leaderboard-data" class="loading">Loading Leaderboard...</div>
             </div>
             
@@ -2000,9 +2003,9 @@
                 
                 if (metalLower.includes('copper')) {
                     value = weight * prices.copper * 0.999;
-                    icon = '<img src="copperbar.png" alt="Copper" class="metal-icon">';
+                    icon = '<img src="copperingot.png" alt="Copper" class="metal-icon">';
                 } else if (metalLower.includes('silver')) {
-                    icon = '<img src="silverbar.png" alt="Silver" class="metal-icon">';
+                    icon = '<img src="silveringot.png" alt="Silver" class="metal-icon">';
                     if (metalLower.includes('.925') || metalLower.includes('925')) {
                         value = weight * prices.silver925 * 0.999;
                     } else if (metalLower.includes('.900') || metalLower.includes('900')) {
@@ -2012,13 +2015,13 @@
                     }
                 } else if (metalLower.includes('gold')) {
                     value = weight * prices.gold * 0.999;
-                    icon = '<img src="goldbar.png" alt="Gold" class="metal-icon">';
+                    icon = '<img src="goldingot.png" alt="Gold" class="metal-icon">';
                 } else if (metalLower.includes('platinum')) {
                     value = weight * prices.platinum * 0.999;
-                    icon = '<img src="silverbar.png" alt="Platinum" class="metal-icon">';
+                    icon = '<img src="silveringot.png" alt="Platinum" class="metal-icon">';
                 } else if (metalLower.includes('vulgar') || metalLower.includes('currency')) {
                     value = weight;
-                    icon = '<img src="vulgarcurrency.png" alt="Currency" class="metal-icon">';
+                    icon = '<img src="stackedcoins.png" alt="Currency" class="metal-icon">';
                     unit = 'USD';
                 }
                 
@@ -2034,7 +2037,7 @@
             
             html += `
                 <div class="total-value">
-                    <img src="estimatedvalue.png" alt="Value" class="value-icon"> Estimated Value: $${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                    <img src="moneybag.png" alt="Value" class="value-icon"> Estimated Value: $${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                 </div>
             `;
             
