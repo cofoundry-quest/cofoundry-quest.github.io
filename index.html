@@ -210,6 +210,13 @@
             transition: all 0.2s ease;
         }
 
+        /* Mobile adjustment for music toggle */
+           @media (max-width: 768px) {
+          .music-toggle {
+          transform: translateY(300px); /* 320px - 20px = 300px */
+    }
+}
+
         .music-toggle:hover {
             position: absolute;
             box-shadow: 2px 2px 0 var(--border-dark);
