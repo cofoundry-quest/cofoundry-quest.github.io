@@ -210,10 +210,10 @@
             transition: all 0.2s ease;
         }
 
-        /* Mobile adjustment for music toggle */
-           @media (max-width: 768px) {
-          .music-toggle {
-          transform: translateY(300px); /* 320px - 20px = 300px */
+@media (max-width: 768px) {
+    .music-toggle {
+        top: calc(0px + env(safe-area-inset-bottom));
+        transform: translateY(320px);
     }
 }
 
