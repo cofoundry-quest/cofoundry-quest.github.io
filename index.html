@@ -187,44 +187,6 @@
         [data-theme="night"] .theme-icon {
             filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.8));
         }
-
-        /* Music Toggle Button */
-        .music-toggle {
-            position: fixed;
-            bottom: calc(20px + env(safe-area-inset-bottom));
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(180deg, var(--border-medium) 0%, var(--border-light) 100%);
-            border: 4px solid var(--border-dark);
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-            box-shadow: 3px 3px 0 var(--border-dark);
-            transition: all 0.2s ease;
-        }
-
-        .music-toggle:hover {
-            transform: translate(1px, 1px);
-            box-shadow: 2px 2px 0 var(--border-dark);
-        }
-
-        .music-toggle:active {
-            transform: translate(3px, 3px);
-            box-shadow: none;
-        }
-
-        .music-icon {
-            filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.5));
-        }
-
-        [data-theme="night"] .music-icon {
-            filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.8));
-        }
         
         /* Castle wall borders - cobblestone texture */
         body::before,
@@ -518,14 +480,6 @@
                 top: calc(15px + env(safe-area-inset-top));
                 left: 15px;
                 right: auto;
-                width: 45px;
-                height: 45px;
-                font-size: 1.3em;
-            }
-
-            .music-toggle {
-                bottom: calc(15px + env(safe-area-inset-bottom));
-                right: 15px;
                 width: 45px;
                 height: 45px;
                 font-size: 1.3em;
@@ -1757,16 +1711,6 @@
         <span class="theme-icon" id="theme-icon">☀️</span>
     </button>
 
-    <button class="music-toggle" onclick="toggleMusic()" aria-label="Toggle background music">
-        <span class="music-icon" id="music-icon">🔇</span>
-    </button>
-
-    <!-- Background Music Audio Element -->
-    <audio id="CofoundryTheme" loop>
-        <source src="CofoundryTheme.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-
     <div class="shadow-gradient-left"></div>
     <div class="shadow-gradient-right"></div>
     
@@ -2050,41 +1994,6 @@
             const currentTheme = document.documentElement.getAttribute('data-theme') || 'day';
             const newTheme = currentTheme === 'day' ? 'night' : 'day';
             setTheme(newTheme);
-        }
-
-        // Music Player Functions
-        function initMusic() {
-            const savedMusicState = localStorage.getItem('cofoundry-music') || 'muted';
-            const audio = document.getElementById('background-music');
-            const icon = document.getElementById('music-icon');
-            
-            audio.volume = 0.7; // Set volume to 70%
-            
-            if (savedMusicState === 'playing') {
-                audio.play().catch(err => {
-                    console.log('Autoplay prevented:', err);
-                    localStorage.setItem('cofoundry-music', 'muted');
-                });
-                icon.textContent = '🎵';
-            } else {
-                audio.pause();
-                icon.textContent = '🔇';
-            }
-        }
-
-        function toggleMusic() {
-            const audio = document.getElementById('background-music');
-            const icon = document.getElementById('music-icon');
-            
-            if (audio.paused) {
-                audio.play();
-                icon.textContent = '🎵';
-                localStorage.setItem('cofoundry-music', 'playing');
-            } else {
-                audio.pause();
-                icon.textContent = '🔇';
-                localStorage.setItem('cofoundry-music', 'muted');
-            }
         }
         
         async function fetchHoardData() {
@@ -2418,7 +2327,6 @@
         }
         
         initTheme();
-        initMusic();
         displayRandomQuote();
         fetchPhotoAssignments();
         fetchHoardData();
