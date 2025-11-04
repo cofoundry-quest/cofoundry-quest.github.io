@@ -606,7 +606,7 @@
         .intro {
             background: transparent;
             border: none;
-            padding: 120px 80px 120px 80px; /* ← ADJUST: Top/bottom padding for cap overlap */
+            padding: 120px 80px 120px 80px;
             margin: 40px 0;
             font-size: 0.95em;
             line-height: 1.7;
@@ -614,52 +614,48 @@
             position: relative;
             color: #2d1810;
             min-height: 200px;
-            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)); /* Shadow */
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
         }
 
-        /* Top scroll cap (BEHIND the middle parchment) */
         .intro-scroll-top {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 150px; /* ← ADJUST: Based on your scroll-top.png height */
+            height: 150px;
             background: url('scroll-top.png') no-repeat center top;
             background-size: 100% auto;
-            z-index: 3; /* above middle */
+            z-index: 3;
             pointer-events: none;
         }
 
-        /* Bottom scroll cap (BEHIND the middle parchment) */
         .intro-scroll-bottom {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 150px; /* ← ADJUST: Based on your scroll-bottom.png height */
+            height: 150px;
             background: url('scroll-bottom.png') no-repeat center bottom;
             background-size: 99.5% auto;
-            z-index: 2; /* above middle */
+            z-index: 2;
             pointer-events: none;
         }
 
-        /* Parchment background with tattered edges (ABOVE the caps) */
         .intro::before {
             content: '';
             position: absolute;
-            top: 80px;    /* ← ADJUST: How much the middle overlaps the top cap */
+            top: 80px;
             left: 0;
             right: 0;
-            bottom: 80px; /* ← ADJUST: How much the middle overlaps the bottom cap */
+            bottom: 80px;
             background: url('scroll-middle.png') repeat-y center top;
             background-size: 91% auto;
-            z-index: 1; /* behind the caps so dithered edges overlap */
+            z-index: 1;
         }
 
-        /* Make text sit above everything */
         .intro p {
             position: relative;
-            z-index: 4; /* Above all scroll elements */
+            z-index: 4;
             margin-bottom: 15px;
         }
         
@@ -667,23 +663,20 @@
             margin-bottom: 0;
         }
 
-        /* Night mode adjustments */
         [data-theme="night"] .intro {
             color: #e8d4b0;
             text-shadow: 0px 0px 10px gold; 
         }
 
-        /* Night mode - darken/adjust scroll images */
-[data-theme="night"] .intro-scroll-top,
-[data-theme="night"] .intro-scroll-bottom,
-[data-theme="night"] .intro::before {
-    filter: 
-        brightness(0.5)        /* Darkens the scroll */
-        contrast(1.1)          /* Adds contrast */
-        sepia(0.2)            /* Adds slight sepia tone */
-}
+        [data-theme="night"] .intro-scroll-top,
+        [data-theme="night"] .intro-scroll-bottom,
+        [data-theme="night"] .intro::before {
+            filter: 
+                brightness(0.5)
+                contrast(1.1)
+                sepia(0.2)
+        }
 
-        /* Mobile scroll adjustments */
         @media (max-width: 768px) {
             .intro {
                 filter: none;
@@ -692,11 +685,11 @@
             
             .intro-scroll-top,
             .intro-scroll-bottom {
-                height: 120px; /* ← ADJUST: Smaller caps on mobile */
+                height: 120px;
             }
             
             .intro::before {
-                top: 20px;    /* ← ADJUST: Mobile overlap values */
+                top: 20px;
                 bottom: 20px;
             }
         }
@@ -825,6 +818,14 @@
             color: #8b4513;
             font-weight: bold;
         }
+
+        /* Style for metal ingot images */
+        .metal-icon {
+            width: 40px;
+            height: auto;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
         
         .total-value {
             background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dark) 100%);
@@ -840,6 +841,14 @@
                 inset 0 2px 4px rgba(255,255,255,0.5),
                 2px 2px 0 var(--border-medium);
             transition: background 0.3s ease;
+        }
+
+        /* Style for money bag image in total value */
+        .value-icon {
+            width: 35px;
+            height: auto;
+            vertical-align: middle;
+            margin-right: 5px;
         }
         
         .leaderboard-stats {
@@ -1057,7 +1066,6 @@
             position: relative;
         }
 
-        /* Match main page scrollbar for modal */
         .application-body::-webkit-scrollbar {
             width: 16px;
         }
@@ -1076,7 +1084,6 @@
             background: #4a3829;
         }
 
-        /* Firefox scrollbar */
         .application-body {
             scrollbar-width: auto;
             scrollbar-color: var(--border-light) var(--border-medium);
@@ -1089,7 +1096,6 @@
             border: none;
         }
 
-        /* Cover Google branding bar at bottom */
         .application-body::after {
             content: '';
             position: absolute;
@@ -1108,7 +1114,6 @@
             box-shadow: inset 0 4px 8px rgba(0,0,0,0.2);
         }
 
-        /* Optional: Decorative border to reinforce coverage */
         .application-content::before {
             content: '';
             position: absolute;
@@ -1183,7 +1188,6 @@
             animation: slideDown 0.3s ease;
         }
 
-        /* Profile modal scrollbar */
         .profile-content::-webkit-scrollbar {
             width: 16px;
         }
@@ -1318,7 +1322,6 @@
             text-align: center;
         }
 
-        /* Badge System */
         .badge-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1429,7 +1432,6 @@
             }
         }
         
-        /* Better mobile optimization */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -1494,6 +1496,11 @@
                 flex-direction: row;
                 gap: 5px;
             }
+
+            .metal-icon {
+                width: 30px;
+                margin-right: 5px;
+            }
             
             .dwarf-row {
                 padding: 10px 10px 10px 20px;
@@ -1519,6 +1526,10 @@
                 font-size: .9em;
                 padding: 15px;
             }
+
+            .value-icon {
+                width: 25px;
+            }
             
             .apply-button {
                 font-size: 1.1em;
@@ -1530,7 +1541,6 @@
                 padding: 15px;
             }
             
-            /* Mobile adjustments for profile modal */
             .profile-content {
                 width: 95%;
                 max-height: 90vh;
@@ -1573,7 +1583,6 @@
                 font-size: 0.65em;
             }
 
-            /* Mobile adjustments for application modal */
             .application-content {
                 width: 100%;
                 max-height: 95vh;
@@ -1589,7 +1598,6 @@
             }
         }
 
-        /* Show thin pillars on larger mobile devices */
         @media (min-width: 600px) and (max-width: 900px) {
             body::before,
             body::after {
@@ -1623,7 +1631,6 @@
     </style>
 </head>
 <body>
-    <!-- Theme Toggle Button -->
     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle day/night mode">
         <span class="theme-icon" id="theme-icon">☀️</span>
     </button>
@@ -1631,7 +1638,6 @@
     <div class="shadow-gradient-left"></div>
     <div class="shadow-gradient-right"></div>
     
-    <!-- Torches with your images -->
     <div class="torch torch-left">
         <img src="torch.gif" alt="Torch" class="torch-image">
         <div class="torch-glow"></div>
@@ -1682,18 +1688,14 @@
                 </a>
             </div>
             
-            <div class="quote" id="random-quote">
-                <!-- Quote will be inserted here by JavaScript -->
-            </div>
+            <div class="quote" id="random-quote"></div>
         </div>
     </div>
 
     <script>
-        // CONFIGURATION
         const SHEET_ID = '1-LJvYKvw0Pgt6vCA6aSFROMwsmY3JLraujWUSVbpAd8';
         const DWARVES_PER_PAGE = 10;
         
-        // Badge System - 6 badges (2 rows x 3 columns) with images
         const BADGES = [
             { title: "Copper Collector", image: "copperbadge.png", threshold: 10 },
             { title: "Bronze Hauler", image: "bronzebadge.png", threshold: 50 },
@@ -1703,12 +1705,10 @@
             { title: "Gold Guardian", image: "goldbadge.png", threshold: 5000 }
         ];
         
-        // Global state for leaderboard
         let allDwarves = [];
         let currentPage = 1;
         let photoAssignmentsCache = null;
         
-        // ROTATING QUOTES
         const FELLOWSHIP_QUOTES = [
             "We measure wealth in weight, not promises.",
             "The Hoard grows. It does not shrink.",
@@ -1759,7 +1759,6 @@
             document.getElementById('random-quote').textContent = `"${quote}"`;
         }
         
-        // Get emoji for title
         function getTitleEmoji(title) {
             const titleEmojis = {
                 "The Cofounder": "👑",
@@ -1774,7 +1773,6 @@
             return titleEmojis[title] || "⚒️";
         }
 
-        // Get badge status for a dwarf
         function getBadgeStatus(dwarfGP) {
             return BADGES.map(badge => ({
                 ...badge,
@@ -1782,7 +1780,6 @@
             }));
         }
 
-        // Generate badge HTML with images
         function generateBadgeHTML(badges) {
             let html = '<div class="badge-grid">';
             badges.forEach(badge => {
@@ -1798,7 +1795,6 @@
             return html;
         }
 
-        // Fetch photo assignments from Google Sheets
         async function fetchPhotoAssignments() {
             try {
                 const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Dwarf%20Photos`;
@@ -1811,7 +1807,6 @@
                 const rows = json.table.rows;
                 const assignments = {};
                 
-                // Build assignments object from sheet
                 for (let i = 0; i < rows.length; i++) {
                     const cells = rows[i].c;
                     if (cells && cells[0] && cells[1]) {
@@ -1834,18 +1829,14 @@
             }
         }
 
-        // Get photo for a dwarf (from cache)
         async function getPhotoForDwarf(dwarfName) {
-            // Load assignments if not cached
             if (photoAssignmentsCache === null) {
                 await fetchPhotoAssignments();
             }
             
-            // Return photo if assigned, otherwise return null
             return photoAssignmentsCache[dwarfName] || null;
         }
 
-        // Application Modal Functions
         function openApplicationModal() {
             const modalHTML = `
                 <div class="application-modal active" id="applicationModal" onclick="closeApplicationModal(event)">
@@ -1882,10 +1873,6 @@
             document.body.style.overflow = 'auto';
         }
 
-        // ============================================
-        // DAY/NIGHT MODE THEME TOGGLE
-        // ============================================
-
         function initTheme() {
             const savedTheme = localStorage.getItem('cofoundry-theme') || 'day';
             setTheme(savedTheme);
@@ -1895,11 +1882,9 @@
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('cofoundry-theme', theme);
             
-            // Update icon
             const icon = document.getElementById('theme-icon');
             icon.textContent = theme === 'day' ? '☀️' : '🌙';
             
-            // Update torch images
             const torches = document.querySelectorAll('.torch-image');
             torches.forEach(torch => {
                 if (theme === 'day') {
@@ -1909,7 +1894,6 @@
                 }
             });
             
-            // Update header banner
             const banner = document.getElementById('header-banner');
             if (banner) {
                 if (theme === 'day') {
@@ -1987,14 +1971,14 @@
             for (const [metal, weight] of Object.entries(metals)) {
                 const metalLower = metal.toLowerCase();
                 let value = 0;
-                let emoji = '';
+                let icon = '';
                 let unit = 'oz';
                 
                 if (metalLower.includes('copper')) {
                     value = weight * prices.copper * 0.999;
-                    emoji = '🟤';
+                    icon = '<img src="copperingot.png" alt="Copper" class="metal-icon">';
                 } else if (metalLower.includes('silver')) {
-                    emoji = '⚪';
+                    icon = '<img src="silveringot.png" alt="Silver" class="metal-icon">';
                     if (metalLower.includes('.925') || metalLower.includes('925')) {
                         value = weight * prices.silver925 * 0.999;
                     } else if (metalLower.includes('.900') || metalLower.includes('900')) {
@@ -2004,13 +1988,13 @@
                     }
                 } else if (metalLower.includes('gold')) {
                     value = weight * prices.gold * 0.999;
-                    emoji = '🟡';
+                    icon = '<img src="goldingot.png" alt="Gold" class="metal-icon">';
                 } else if (metalLower.includes('platinum')) {
                     value = weight * prices.platinum * 0.999;
-                    emoji = '⚫';
+                    icon = '<img src="silveringot.png" alt="Platinum" class="metal-icon">';
                 } else if (metalLower.includes('vulgar') || metalLower.includes('currency')) {
                     value = weight;
-                    emoji = '💵';
+                    icon = '<img src="stackedcoins.png" alt="Currency" class="metal-icon">';
                     unit = 'USD';
                 }
                 
@@ -2018,7 +2002,7 @@
                 
                 html += `
                     <div class="metal-row">
-                        <span class="metal-name">${emoji} ${metal}</span>
+                        <span class="metal-name">${icon} ${metal}</span>
                         <span class="metal-weight">${weight.toFixed(2)} ${unit}</span>
                     </div>
                 `;
@@ -2026,7 +2010,7 @@
             
             html += `
                 <div class="total-value">
-                    Estimated Value: 💰 $${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                    <img src="moneybag.png" alt="Value" class="value-icon"> Estimated Value: $${totalValue.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                 </div>
             `;
             
@@ -2150,7 +2134,6 @@
             makeNamesClickable();
         }
         
-        // DWARF PROFILE MODAL SYSTEM
         async function showDwarfProfile(dwarfName) {
             const dwarf = allDwarves.find(d => d.name === dwarfName);
             if (!dwarf) return;
@@ -2164,11 +2147,9 @@
             const badges = getBadgeStatus(dwarf.gp);
             const badgeHTML = generateBadgeHTML(badges);
             
-            // Get assigned photo for this dwarf (async)
             const photoFilename = await getPhotoForDwarf(dwarfName);
             const photoPath = photoFilename ? `dwarfphotos/${photoFilename}` : null;
             
-            // Build photo HTML
             let photoHTML = '';
             if (photoPath) {
                 photoHTML = `
@@ -2244,10 +2225,9 @@
             });
         }
         
-        // Initialize everything
         initTheme();
         displayRandomQuote();
-        fetchPhotoAssignments(); // Preload photo assignments
+        fetchPhotoAssignments();
         fetchHoardData();
         fetchLeaderboard();
         
