@@ -2,13 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Cofoundry Quest - Dwarven Metal Collecting LARP Game | The Valorforge</title>
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="Cofoundry Quest is a dwarven-fantasy themed metal collecting co-op LARP game. Join our fellowship, collect precious metals, earn Glory Points, and build The Hoard together.">
     <meta name="keywords" content="cofoundry, cofoundry quest, valorforge, metal collecting, LARP game, dwarven fantasy, precious metals, copper collecting, silver stacking, scrap metal">
     <meta name="author" content="Cofoundry Quest">
+    
+    <!-- Theme Color for Mobile Browsers -->
+    <meta name="theme-color" content="#1a1a1a" id="theme-color-meta">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -125,6 +130,11 @@
             padding: 0;
             box-sizing: border-box;
         }
+
+        html {
+            /* Extend content into safe areas on notched devices */
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
         
         body {
             font-family: 'MedievalSharp', 'Courier New', monospace;
@@ -137,12 +147,13 @@
             padding: 20px;
             position: relative;
             transition: background 0.5s ease, color 0.3s ease;
+            margin: 0;
         }
         
         /* Theme Toggle Button */
         .theme-toggle {
             position: fixed;
-            top: 20px;
+            top: calc(20px + env(safe-area-inset-top));
             right: 20px;
             width: 50px;
             height: 50px;
@@ -466,7 +477,7 @@
             }
 
             .theme-toggle {
-                top: 15px;
+                top: calc(15px + env(safe-area-inset-top));
                 left: 15px;
                 right: auto;
                 width: 45px;
@@ -1837,7 +1848,7 @@
                 "Silver Seeker": "silverbadge.png",
                 "Bronze Hauler": "bronzebadge.png",
                 "Copper Collector": "copperbadge.png",
-                "Apprentice Scrapper": "apprenticeicon.png"
+                "Apprentice Scrapper": "apprencticeicon.png"
             };
             return titleImages[title] || "hammer&pick.png";
         }
@@ -1953,6 +1964,12 @@
             
             const icon = document.getElementById('theme-icon');
             icon.textContent = theme === 'day' ? '☀️' : '🌙';
+            
+            // Update theme-color meta tag for mobile browsers
+            const themeColorMeta = document.getElementById('theme-color-meta');
+            if (themeColorMeta) {
+                themeColorMeta.setAttribute('content', theme === 'day' ? '#1a1a1a' : '#0a0e1a');
+            }
             
             const torches = document.querySelectorAll('.torch-image');
             torches.forEach(torch => {
