@@ -525,6 +525,16 @@
                 bottom: 25px;
             }
 
+          .metal-row,
+          .dwarf-row {
+                background-image: url('stone-container-landscape.png');
+                padding: 15px 20px;
+            }
+    
+          .dwarf-row {
+                padding-left: 45px;
+     }
+
             /* Theme toggle - absolute on banner */
             .theme-toggle {
                 position: absolute;
@@ -867,51 +877,57 @@
         }
         
         .metal-row {
-            background: var(--panel-dark);
-            border: 3px solid var(--border-dark);
-            padding: 12px 15px;
-            margin: 8px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            box-shadow: 2px 2px 0 var(--border-medium);
-            font-size: 1.5em;
-            text-align: center;
-            transition: background 0.3s ease;
-        }
-        
-        .metal-row:hover {
-            background: var(--container-bg);
-        }
+    background-image: url('stone-container-desktop.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none; /* Remove old border */
+    padding: 20px 25px; /* Adjust padding to account for stone border */
+    margin: 8px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    box-shadow: none; /* Remove old shadow */
+    font-size: 1.5em;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
 
-        .dwarf-row {
-            background: var(--panel-dark);
-            border: 3px solid var(--border-dark);
-            padding: 12px 15px 12px 45px;
-            margin: 8px 0;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            gap: 20px;
-            box-shadow: 2px 2px 0 var(--border-medium);
-            font-size: 1em;
-            text-align: center;
-            position: relative;
-            transition: background 0.3s ease;
-        }
+.metal-row:hover {
+    transform: scale(1.02);
+    background-color: transparent; /* Remove old hover color */
+}
 
-        .dwarf-row:hover {
-            background: var(--container-bg);
-        }
-        
-        .dwarf-row.top-three {
-            background: var(--gold);
-            border-color: var(--border-medium);
-            box-shadow: 
-                2px 2px 0 var(--border-medium),
-                0 0 10px rgba(255, 215, 0, 0.3);
-        }
+.dwarf-row {
+    background-image: url('stone-container-desktop.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    padding: 20px 25px 20px 50px; /* Extra left padding for rank number */
+    margin: 8px 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    box-shadow: none;
+    font-size: 1em;
+    text-align: center;
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.dwarf-row:hover {
+    transform: scale(1.02);
+    background-color: transparent;
+}
+
+.dwarf-row.top-three {
+    background-image: url('stone-container-desktop.png'); /* Keep same image, gold handled by text color */
+    border: none;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); /* Gold glow for top 3 */
+}
 
         .dwarf-rank {
             font-weight: bold;
@@ -1667,6 +1683,16 @@
                 flex-direction: row;
                 gap: 5px;
             }
+
+                .metal-row,
+    .dwarf-row {
+        background-image: url('stone-container-mobile.png');
+        padding: 12px 15px;
+    }
+    
+    .dwarf-row {
+        padding-left: 35px;
+    }
 
             .metal-icon {
                 width: 30px;
