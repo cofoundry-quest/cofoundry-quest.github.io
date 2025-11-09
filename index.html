@@ -87,28 +87,27 @@
                 3px 3px 10px rgba(0,0,0,0.8);
         }
 
-        [data-theme="night"] .metal-row,
-        [data-theme="night"] .dwarf-row {
-            background: var(--panel-dark);
-            border-color: var(--border-medium);
-        }
+[data-theme="night"] .metal-row,
+[data-theme="night"] .dwarf-row {
+    background-color: transparent; /* Don't override background-image */
+    border-color: transparent;
+    filter: brightness(0.7) contrast(1.1) saturate(0.8) hue-rotate(200deg);
+}
 
-        [data-theme="night"] .metal-row,
-        [data-theme="night"] .dwarf-row {
-          filter: brightness(0.85) hue-rotate(200deg);
-       }
-        
-        [data-theme="night"] .metal-row:hover,
-        [data-theme="night"] .dwarf-row:hover {
-            background: #374151;
-        }
+[data-theme="night"] .metal-row:hover,
+[data-theme="night"] .dwarf-row:hover {
+    background-color: transparent; /* Keep transparent on hover */
+    filter: brightness(0.75) contrast(1.15) saturate(0.85) hue-rotate(200deg);
+}
 
         /* Keep top 3 visible in night mode */
-        [data-theme="night"] .dwarf-row.top-three {
-            background: #29394D;
-            border-color: var(--gold-dark);
-            color: #fef3c7;
-        }
+[data-theme="night"] .dwarf-row.top-three {
+    background-color: transparent;
+    border-color: transparent;
+    filter: brightness(0.75) contrast(1.15) saturate(0.85) hue-rotate(200deg);
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.6); /* Stronger gold glow at night */
+    color: #fef3c7;
+}
 
         /* Better contrast for text in night mode */
         [data-theme="night"] .metal-weight,
