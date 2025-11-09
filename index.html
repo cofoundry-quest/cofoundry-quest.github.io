@@ -500,6 +500,13 @@ body::after {
 
         /* Landscape/tablet specific fixes */
         @media (min-width: 600px) and (max-width: 900px) and (orientation: landscape) {
+
+            body {
+                padding: 0;
+                align-items: flex-start;
+                padding-top: 10px;
+            }
+            
             /* Keep torches centered on pillars */
             .torch-left {
                 left: 0;
