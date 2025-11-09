@@ -507,15 +507,15 @@
                 /* Extend pillars beyond viewport to account for collapsing URL bar */
     body::before,
     body::after {
-        top: -100px !important; /* Start above viewport */
-        height: calc(100vh + 200px); /* Extend beyond viewport */
+        top: 0 !important; /* Start above viewport */
+        height: 200vh !important; /* Extend beyond viewport */
         bottom: auto !important; /* Remove bottom anchor */
     }
 
     .shadow-gradient-left,
     .shadow-gradient-right {
-        top: -100px !important;
-        height: calc(100vh + 200px);
+        top: 0 !important;
+        height: 200vh !important;
         bottom: auto !important;
     }
 
