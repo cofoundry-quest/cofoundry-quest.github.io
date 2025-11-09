@@ -503,6 +503,22 @@
             .body {
                 padding: 0px 20px; /* Less top/bottom, keep horizontal */
             }
+
+                /* Extend pillars beyond viewport to account for collapsing URL bar */
+    body::before,
+    body::after {
+        top: -100px !important; /* Start above viewport */
+        height: calc(100% + 200px); /* Extend beyond viewport */
+        bottom: auto; /* Remove bottom anchor */
+    }
+
+    .shadow-gradient-left,
+    .shadow-gradient-right {
+        top: -100px !important;
+        height: calc(100% + 200px);
+        bottom: auto;
+    }
+
             /* Keep torches centered on pillars */
             .torch-left {
                 left: 0;
