@@ -40,41 +40,45 @@
         @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Uncial+Antiqua&display=swap');
         
         /* CSS Variables for Day/Night Mode */
-        :root {
-            /* Day Mode Colors (default) */
-            --bg-gradient-start: #1a1a1a;
-            --bg-gradient-end: #2d2416;
-            --container-bg: #c9b896;
-            --panel-bg: #e8dcc4;
-            --panel-dark: #d4c5a9;
-            --text-color: #3d2817;
-            --text-secondary: #1a0f08;
-            --border-dark: #3d2817;
-            --border-medium: #8b6f47;
-            --border-light: #5d4a36;
-            --gold: #ffd700;
-            --gold-dark: #daa520;
-            --gold-text: #d4af37;
-            --text-shadow-color: #d4af37;
-        }
+:root {
+    /* Day Mode Colors - COOL STONE PALETTE */
+    --bg-gradient-start: #2a2d2e; /* Dark slate */
+    --bg-gradient-end: #3d4245; /* Charcoal stone */
+    --container-bg: #b5b3a4; /* Cool stone beige */
+    --panel-bg: #d4d1c1; /* Light stone */
+    --panel-dark: #a8a599; /* Medium stone grey */
+    --text-color: #2b2924; /* Dark charcoal */
+    --text-secondary: #3d3a35; /* Stone grey */
+    --border-dark: #3a3933; /* Dark stone border */
+    --border-medium: #6b6860; /* Stone grey-brown */
+    --border-light: #5a5650; /* Medium stone */
+    --gold: #d4af37; /* Slightly muted gold */
+    --gold-dark: #b8941f; /* Darker gold */
+    --gold-text: #c9a961; /* Warm gold text */
+    --text-shadow-color: #c9a961;
+    --moss-green: #6b7a5a; /* Moss accent */
+    --stone-blue: #7a8a9a; /* Stone blue accent */
+}
 
-        [data-theme="night"] {
-            /* Night Mode Colors */
-            --bg-gradient-start: #0a0e1a;
-            --bg-gradient-end: #1a1e2d;
-            --container-bg: #2d3748;
-            --panel-bg: #374151;
-            --panel-dark: #1f2937;
-            --text-color: #f0f9ff;
-            --text-secondary: #e0f2fe;
-            --border-dark: #1a202c;
-            --border-medium: #4a5568;
-            --border-light: #2d3748;
-            --gold: #fbbf24;
-            --gold-dark: #d97706;
-            --gold-text: #fcd34d;
-            --text-shadow-color: #1e293b;
-        }
+[data-theme="night"] {
+    /* Night Mode Colors - DARKER STONE */
+    --bg-gradient-start: #1a1d1f;
+    --bg-gradient-end: #252829;
+    --container-bg: #4a4d4f;
+    --panel-bg: #5a5d5f;
+    --panel-dark: #3a3d3f;
+    --text-color: #e8e6e0;
+    --text-secondary: #d0cec8;
+    --border-dark: #2a2d2e;
+    --border-medium: #4a4d4f;
+    --border-light: #3a3d3f;
+    --gold: #e6c84f;
+    --gold-dark: #c9a961;
+    --gold-text: #f5d76e;
+    --text-shadow-color: #2a2d2e;
+    --moss-green: #8a9a7a;
+    --stone-blue: #8a9aaa;
+}
 
         /* Night mode specific adjustments for better contrast */
         [data-theme="night"] .profile-section-title {
