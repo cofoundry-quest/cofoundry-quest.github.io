@@ -131,25 +131,23 @@
         }
 
         html {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden; /* Prevent horizontal scroll */
-}
+            /* Extend content into safe areas on notched devices */
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
         
-body {
-    font-family: 'MedievalSharp', 'Courier New', monospace;
-    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-    color: var(--text-color);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    position: relative;
-    transition: background 0.5s ease, color 0.3s ease;
-    margin: 0;
-    overflow-x: hidden; /* Prevent horizontal scroll */
-}
+        body {
+            font-family: 'MedievalSharp', 'Courier New', monospace;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            transition: background 0.5s ease, color 0.3s ease;
+            margin: 0;
+        }
         
         /* Theme Toggle Button - DESKTOP: Fixed on pillar */
         .theme-toggle {
@@ -228,25 +226,25 @@ body {
         }
         
         /* Castle wall borders - cobblestone texture - FIXED */
-body::before,
-body::after {
-    content: '';
-    position: fixed;
-    top: 0 !important;
-    bottom: 0 !important;
-    width: 120px;
-    background-image: url('cobblestone.png');
-    background-size: 120px auto;
-    background-repeat: repeat-y;
-    background-position: center;
-    box-shadow: 
-        inset 0 0 80px rgba(0,0,0,0.5),
-        inset 20px 0 40px rgba(0,0,0,0.4),
-        inset -20px 0 40px rgba(0,0,0,0.4);
-    z-index: 1000;
-    pointer-events: none;
-    transition: filter 0.5s ease;
-}
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 120px;
+            background-image: url('cobblestone.png');
+            background-size: 120px auto;
+            background-repeat: repeat-y;
+            background-position: center;
+            box-shadow: 
+                inset 0 0 80px rgba(0,0,0,0.5),
+                inset 20px 0 40px rgba(0,0,0,0.4),
+                inset -20px 0 40px rgba(0,0,0,0.4);
+            z-index: 1000;
+            pointer-events: none;
+            transition: filter 0.5s ease;
+        }
 
         /* Warm torch lighting on pillars - day mode */
         body::before {
@@ -266,15 +264,15 @@ body::after {
         }
 
         /* Shadow gradient behind pillars - FIXED */
-.shadow-gradient-left,
-.shadow-gradient-right {
-    position: fixed;
-    top: 0 !important;
-    bottom: 0 !important;
-    width: 400px;
-    pointer-events: none;
-    z-index: 999;
-}
+        .shadow-gradient-left,
+        .shadow-gradient-right {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 400px;
+            pointer-events: none;
+            z-index: 999;
+        }
 
         .shadow-gradient-left {
             left: 0;
@@ -500,13 +498,6 @@ body::after {
 
         /* Landscape/tablet specific fixes */
         @media (min-width: 600px) and (max-width: 900px) and (orientation: landscape) {
-
-            body {
-                padding: 0 20px;
-                align-items: flex-start;
-                padding-top: 10px;
-            }
-            
             /* Keep torches centered on pillars */
             .torch-left {
                 left: 0;
@@ -604,7 +595,6 @@ body::after {
 }
         
         .container {
-            margin-top: 10px;
             max-width: 900px;
             background: var(--container-bg);
             background-image: 
@@ -1874,15 +1864,15 @@ body::after {
                 <div class="intro-scroll-top"></div>
                 <div class="intro-scroll-bottom"></div>
                 
-                <p>Cofoundry is an invite only, <b>dwarven-fantasy themed metal collecting co-op LARP game</b> where we turn loot into treasure. 
-                Join a Quest Party or adventure solo, collect treasure, earn Glory Points - <b>1 point per pound of copper</b> or 10 per ounce of silver.</p>
+                <p>Cofoundry is an invite only, dwarven-fantasy themed metal collecting co-op LARP game where we turn loot into treasure. 
+                Join a Quest Party or adventure solo, collect treasure, earn Glory Points - 1 point per pound of copper or 10 per ounce of silver.</p>
                 
                 <p>We melt our copper and cast it into bars. Other metals get scrapped for "vulgar currency" to buy silver and gold. 
-                <b>Liquidation can only occur with a 90% vote,</b> almost certainly ensuring the hoard only ever accumulates. If liquidation occurs, <b>payout is based on player's GP</b>, ensuring payout based on participation. 
+                Liquidation can only occur with a 90% vote, almost certainly ensuring the hoard only ever accumulates. If liquidation occurs, payout is based on player's GP, ensuring payout based on participation. 
                 Beyond that, parts of the hoard can be sold for vulgar currency to expand your local Cofoundry Commonwealth's Valorforge.</p>
                 
                 <p>It's a long-term experiment to see how much precious metal we can accumulate together. Part LARP, part dwarven investment club, part environmental scavenging project, 100% real metal. 
-                <b>Want to quest with us?</b></p>
+                Want to quest with us?</p>
             </div>
             
             <div class="panel">
