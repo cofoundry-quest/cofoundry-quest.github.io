@@ -87,27 +87,34 @@
                 3px 3px 10px rgba(0,0,0,0.8);
         }
 
-[data-theme="night"] .metal-row,
-[data-theme="night"] .dwarf-row {
-    background-color: transparent; /* Don't override background-image */
-    border-color: transparent;
-    filter: brightness(0.7) contrast(1.1) saturate(0.8) hue-rotate(200deg);
-}
+        /* Night mode - filter only the background images, not content */
+        [data-theme="night"] .metal-row,
+        [data-theme="night"] .dwarf-row {
+            background-color: transparent;
+            border-color: transparent;
+        }
 
-[data-theme="night"] .metal-row:hover,
-[data-theme="night"] .dwarf-row:hover {
-    background-color: transparent; /* Keep transparent on hover */
-    filter: brightness(0.75) contrast(1.15) saturate(0.85) hue-rotate(200deg);
-}
+        [data-theme="night"] .metal-row::before,
+        [data-theme="night"] .dwarf-row::before {
+            filter: brightness(0.7) contrast(1.1) saturate(0.8) hue-rotate(200deg);
+        }
+
+        [data-theme="night"] .metal-row:hover::before,
+        [data-theme="night"] .dwarf-row:hover::before {
+            filter: brightness(0.75) contrast(1.15) saturate(0.85) hue-rotate(200deg);
+        }
 
         /* Keep top 3 visible in night mode */
-[data-theme="night"] .dwarf-row.top-three {
-    background-color: transparent;
-    border-color: transparent;
-    filter: brightness(0.75) contrast(1.15) saturate(0.85) hue-rotate(200deg);
-    box-shadow: 0 0 20px rgba(251, 191, 36, 0.6); /* Stronger gold glow at night */
-    color: #fef3c7;
-}
+        [data-theme="night"] .dwarf-row.top-three {
+            background-color: transparent;
+            border-color: transparent;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.6);
+            color: #fef3c7;
+        }
+
+        [data-theme="night"] .dwarf-row.top-three::before {
+            filter: brightness(0.75) contrast(1.15) saturate(0.85) hue-rotate(200deg);
+        }
 
         /* Better contrast for text in night mode */
         [data-theme="night"] .metal-weight,
@@ -195,8 +202,8 @@
         /* Music Toggle Button - Absolute on container, left side between banner and scroll */
         .music-toggle {
             position: absolute;
-            left: 620px;
-            top: 335px;
+            left: 20px;
+            top: 220px;
             width: 50px;
             height: 50px;
             background: linear-gradient(180deg, var(--border-medium) 0%, var(--border-light) 100%);
@@ -514,36 +521,25 @@
 
             /* Fix scroll spacing */
             .intro {
-                filter: none;
                 padding: 80px 50px;
                 margin: 30px 0;
             }
 
             .intro-scroll-top,
             .intro-scroll-bottom {
-                height: 60px;
+                height: 80px;
             }
 
             .intro::before {
-                top: 25px;
-                bottom: 25px;
+                top: 50px;
+                bottom: 50px;
             }
-
-          .metal-row,
-          .dwarf-row {
-                background-image: url('Dwarfcontainerlandscape.png');
-                padding: 15px 20px;
-            }
-    
-          .dwarf-row {
-                padding-left: 45px;
-     }
 
             /* Theme toggle - absolute on banner */
             .theme-toggle {
                 position: absolute;
-                top: 40px;
-                left: 45px;
+                top: 15px;
+                right: 15px;
                 width: 45px;
                 height: 45px;
                 font-size: 1.3em;
@@ -551,11 +547,17 @@
 
             /* Music toggle - absolute on container */
             .music-toggle {
-                left: 35px;
-                top: 270px;
+                left: 15px;
+                top: 180px;
                 width: 45px;
                 height: 45px;
                 font-size: 1.3em;
+            }
+
+            /* Landscape stone containers */
+            .metal-row::before,
+            .dwarf-row::before {
+                background-image: url('Dwarfcontainerlandscape.png');
             }
         }
 
@@ -579,7 +581,7 @@
             .theme-toggle {
                 position: absolute;
                 top: 15px;
-                left: 15px;
+                right: 15px;
                 width: 45px;
                 height: 45px;
                 font-size: 1.3em;
@@ -587,11 +589,17 @@
 
             /* Music toggle - absolute on container below banner */
             .music-toggle {
-                left: 25px;
-                top: 154px;
-                width: 35px;
-                height: 35px;
+                left: 15px;
+                top: 165px;
+                width: 45px;
+                height: 45px;
                 font-size: 1.3em;
+            }
+
+            /* Mobile stone containers */
+            .metal-row::before,
+            .dwarf-row::before {
+                background-image: url('Dwarfcontainerportrait.png');
             }
         }
         
@@ -815,17 +823,6 @@
             }
         }
         
-           @media (orientation: landscape) {
-            .intro {
-                filter: none;
-            }
-            
-            .intro::before {
-                top: 30px;                   /* Where middle section starts from top */
-                bottom: 30px;                /* Where middle section ends from bottom */
-    }
-    }
-        
         /* ================================================
            END SCROLL SECTION
            ================================================ */
@@ -859,7 +856,7 @@
             font-weight: bold;
             color: var(--text-color);
             text-align: center;
-            margin: 30px 0;
+            margin: 20px 0;
             text-shadow: 2px 2px 0 var(--text-shadow-color);
             letter-spacing: 3px;
             text-transform: uppercase;
@@ -881,57 +878,78 @@
         }
         
         .metal-row {
-    background-image: url('Dwarfcontainerdesktop.png');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    border: none; /* Remove old border */
-    padding: 20px 25px; /* Adjust padding to account for stone border */
-    margin: 8px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    box-shadow: none; /* Remove old shadow */
-    font-size: 1.5em;
-    text-align: center;
-    transition: transform 0.2s ease;
-}
+            background-color: transparent;
+            border: none;
+            padding: 20px 25px;
+            margin: 8px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            box-shadow: none;
+            font-size: 1.5em;
+            text-align: center;
+            transition: transform 0.2s ease;
+            position: relative;
+        }
 
-.metal-row:hover {
-    transform: scale(1.02);
-    background-color: transparent; /* Remove old hover color */
-}
+        .metal-row::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('Dwarfcontainerdesktop.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: -1;
+            transition: filter 0.3s ease;
+        }
 
-.dwarf-row {
-    background-image: url('Dwarfcontainerdesktop.png');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    border: none;
-    padding: 20px 25px 20px 50px; /* Extra left padding for rank number */
-    margin: 8px 0;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 20px;
-    box-shadow: none;
-    font-size: 1em;
-    text-align: center;
-    position: relative;
-    transition: transform 0.2s ease;
-}
+        .metal-row:hover {
+            transform: scale(1.02);
+        }
 
-.dwarf-row:hover {
-    transform: scale(1.02);
-    background-color: transparent;
-}
+        .dwarf-row {
+            background-color: transparent;
+            border: none;
+            padding: 20px 25px 20px 50px;
+            margin: 8px 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 20px;
+            box-shadow: none;
+            font-size: 1em;
+            text-align: center;
+            position: relative;
+            transition: transform 0.2s ease;
+        }
 
-.dwarf-row.top-three {
-    background-image: url('Dwarfcontainerdesktop.png'); /* Keep same image, gold handled by text color */
-    border: none;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); /* Gold glow for top 3 */
-}
+        .dwarf-row::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('Dwarfcontainerdesktop.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: -1;
+            transition: filter 0.3s ease;
+        }
+
+        .dwarf-row:hover {
+            transform: scale(1.02);
+        }
+        
+        .dwarf-row.top-three {
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
 
         .dwarf-rank {
             font-weight: bold;
@@ -1688,16 +1706,6 @@
                 gap: 5px;
             }
 
-                .metal-row,
-    .dwarf-row {
-        background-image: url('Dwarfcontainerportrait.png');
-        padding: 12px 15px;
-    }
-    
-    .dwarf-row {
-        padding-left: 35px;
-    }
-
             .metal-icon {
                 width: 30px;
                 margin-right: 5px;
@@ -1995,7 +2003,7 @@
                 "Silver Seeker": "silverbadge.png",
                 "Bronze Hauler": "bronzebadge.png",
                 "Copper Collector": "copperbadge.png",
-                "Apprentice Scrapper": "apprenticeicon.png"
+                "Apprentice Scrapper": "apprencticeicon.png"
             };
             return titleImages[title] || "hammer&pick.png";
         }
