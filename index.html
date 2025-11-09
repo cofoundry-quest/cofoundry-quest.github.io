@@ -88,33 +88,21 @@
         }
 
         /* Night mode - filter only the background images, not content */
-        [data-theme="night"] .metal-row,
-        [data-theme="night"] .dwarf-row {
-            background-color: transparent;
-            border-color: transparent;
-        }
+    [data-theme="night"] .metal-row,
+[data-theme="night"] .dwarf-row {
+    filter: brightness(0.7) contrast(1.1);
+}
 
-        [data-theme="night"] .metal-row::before,
-        [data-theme="night"] .dwarf-row::before {
-            filter: brightness(0.7) contrast(1.1) saturate(0.8) hue-rotate(200deg);
-        }
+[data-theme="night"] .metal-row:hover,
+[data-theme="night"] .dwarf-row:hover {
+    filter: brightness(0.75) contrast(1.15);
+}
 
-        [data-theme="night"] .metal-row:hover::before,
-        [data-theme="night"] .dwarf-row:hover::before {
-            filter: brightness(0.75) contrast(1.15) saturate(0.85) hue-rotate(200deg);
-        }
-
-        /* Keep top 3 visible in night mode */
-        [data-theme="night"] .dwarf-row.top-three {
-            background-color: transparent;
-            border-color: transparent;
-            box-shadow: 0 0 20px rgba(251, 191, 36, 0.6);
-            color: #fef3c7;
-        }
-
-        [data-theme="night"] .dwarf-row.top-three::before {
-            filter: brightness(0.75) contrast(1.15) saturate(0.85) hue-rotate(200deg);
-        }
+[data-theme="night"] .dwarf-row.top-three {
+    filter: brightness(0.75) contrast(1.15);
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.6);
+    color: #fef3c7;
+}
 
         /* Better contrast for text in night mode */
         [data-theme="night"] .metal-weight,
@@ -555,10 +543,10 @@
             }
 
             /* Landscape stone containers */
-            .metal-row::before,
-            .dwarf-row::before {
-                background-image: url('Dwarfcontainerlandscape.png');
-            }
+    .metal-row,
+    .dwarf-row {
+        background-image: url('Dwarfcontainerlandscape.png');
+    }
         }
 
         @media (max-width: 600px) {
@@ -597,11 +585,11 @@
             }
 
             /* Mobile stone containers */
-            .metal-row::before,
-            .dwarf-row::before {
-                background-image: url('Dwarfcontainerportrait.png');
-            }
-        }
+    .metal-row,
+    .dwarf-row {
+        background-image: url('Dwarfcontainerportrait.png');
+    }
+}
         
         .container {
             max-width: 900px;
@@ -878,78 +866,56 @@
         }
         
         .metal-row {
-            background-color: transparent;
-            border: none;
-            padding: 20px 25px;
-            margin: 8px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            box-shadow: none;
-            font-size: 1.5em;
-            text-align: center;
-            transition: transform 0.2s ease;
-            position: relative;
-        }
+    background-image: url('Dwarfcontainerdesktop.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    border: none;
+    padding: 20px 25px;
+    margin: 8px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    box-shadow: none;
+    font-size: 1.5em;
+    text-align: center;
+    transition: transform 0.2s ease, filter 0.3s ease;
+    position: relative;
+}
 
-        .metal-row::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('Dwarfcontainerdesktop.png');
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            background-position: center;
-            z-index: -1;
-            transition: filter 0.3s ease;
-        }
+.metal-row:hover {
+    transform: scale(1.02);
+}
 
-        .metal-row:hover {
-            transform: scale(1.02);
-        }
+.dwarf-row {
+    background-image: url('Dwarfcontainerdesktop.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    border: none;
+    padding: 20px 25px 20px 50px;
+    margin: 8px 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    box-shadow: none;
+    font-size: 1em;
+    text-align: center;
+    position: relative;
+    transition: transform 0.2s ease, filter 0.3s ease;
+}
 
-        .dwarf-row {
-            background-color: transparent;
-            border: none;
-            padding: 20px 25px 20px 50px;
-            margin: 8px 0;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            gap: 20px;
-            box-shadow: none;
-            font-size: 1em;
-            text-align: center;
-            position: relative;
-            transition: transform 0.2s ease;
-        }
+.dwarf-row:hover {
+    transform: scale(1.02);
+}
 
-        .dwarf-row::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('Dwarfcontainerdesktop.png');
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            background-position: center;
-            z-index: -1;
-            transition: filter 0.3s ease;
-        }
-
-        .dwarf-row:hover {
-            transform: scale(1.02);
-        }
-        
-        .dwarf-row.top-three {
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-        }
+.dwarf-row.top-three {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
 
         .dwarf-rank {
             font-weight: bold;
