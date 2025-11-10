@@ -646,8 +646,6 @@
         }
         
 .container {
-    max-width: 900px;
-    background: var(--container-bg);
     background-image: 
         radial-gradient(rgba(0,0,0,.1) 1px, transparent 1px),
         radial-gradient(rgba(0,0,0,.1) 1px, transparent 1px);
@@ -661,21 +659,21 @@
         0 10px 30px rgba(0,0,0,0.7);
     transition: background 0.3s ease, border-color 0.3s ease;
     position: relative;
-    z-index: 2; /* Ensure container is above shadow */
 }
 
-/* Shadow behind container onto background */
-.container::before {
-    content: '';
+.container-shadow {
     position: absolute;
-    top: 30px;
-    left: 20px;
-    right: 20px;
-    bottom: -30px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 900px;
+    height: calc(100% + 60px);
+    max-width: 90%;
     background: rgba(0, 0, 0, 0.6);
     filter: blur(40px);
     z-index: -1;
     border-radius: 8px;
+    pointer-events: none;
 }
         
         .header {
@@ -1930,6 +1928,7 @@
         <div class="torch-glow"></div>
     </div>
     
+    <div class="container-shadow"></div>
     <div class="container">
 
             <button class="music-toggle" onclick="toggleMusic()" aria-label="Toggle background music">
