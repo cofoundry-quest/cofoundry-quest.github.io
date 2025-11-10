@@ -638,10 +638,10 @@
             max-width: 900px;
             background: var(--container-bg);
             background-image: 
-                radial-gradient(rgba(0,0,0,.15) 2px, transparent 2px),
-                radial-gradient(rgba(0,0,0,.15) 2px, transparent 2px);
-            background-size: 8px 8px;
-            background-position: 0 0, 4px 4px;
+                radial-gradient(rgba(0,0,0,.1) 1px, transparent 1px),
+                radial-gradient(rgba(0,0,0,.1) 1px, transparent 1px);
+            background-size: 4px 4px;
+            background-position: 0 0, 2px 2px;
             padding: 0;
             border: 8px solid var(--border-dark);
             box-shadow: 
@@ -1836,6 +1836,15 @@
                 min-height: 500px;
             }
         }
+
+        @media (min-width: 901px) {
+            .container {
+                background-image:
+                    radial-gradient(rgba(0,0,0,.15) 2px, transparent 2px),
+                    radial-gradient(rgba(0,0,0,.15) 2px, transparent 2px);
+                background-size: 8px 8px;
+                background-position: 0 0, 4px 4px;
+            }
 
         @media (min-width: 600px) and (max-width: 900px) {
             body::before,
