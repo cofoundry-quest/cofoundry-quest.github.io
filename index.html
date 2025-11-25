@@ -2267,7 +2267,7 @@
                     }
                 }
                 
-                const ledgerUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Metal%20Prices&range=B2:B7`;
+                const ledgerUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Metal%20Prices&range=B2:B8`;
                 const pricesResponse = await fetch(ledgerUrl);
                 const pricesText = await pricesResponse.text();
                 const pricesJsonMatch = pricesText.match(/google\.visualization\.Query\.setResponse\((.*)\);?\s*$/);
@@ -2275,7 +2275,7 @@
                 
                 const pricesRows = pricesJson.table.rows;
                 
-                if (!pricesRows || pricesRows.length < 6) {
+                if (!pricesRows || pricesRows.length < 7) {
                     throw new Error('Not enough price data in sheet');
                 }
                 
@@ -2284,6 +2284,7 @@
                     silver999: parseFloat(pricesRows[1].c[0].v),
                     silver925: parseFloat(pricesRows[2].c[0].v),
                     silver900: parseFloat(pricesRows[3].c[0].v),
+                    silver350: parseFloat(pricesRows[4].c[0].v),
                     gold: parseFloat(pricesRows[4].c[0].v),
                     platinum: parseFloat(pricesRows[5].c[0].v)
                 };
@@ -2316,6 +2317,9 @@
                         value = weight * prices.silver925 * 0.999;
                     } else if (metalLower.includes('.900') || metalLower.includes('900')) {
                         value = weight * prices.silver900 * 0.999;
+                        } else if (metalLower.includes('.350') || metalLower.includes('350')) {
+    value = weight * prices.silver350 * 0.999;
+}
                     } else {
                         value = weight * prices.silver999 * 0.999;
                     }
