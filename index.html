@@ -2367,10 +2367,10 @@
                 
                 for (let i = 1; i < rows.length; i++) {
                     const cells = rows[i].c;
-                    if (cells && cells[1] && cells[9]) {
-                        const dwarfName = cells[1].v;
-                        const gloryPoints = parseFloat(cells[9].v) || 0;
-                        const title = cells[10] ? cells[10].v : "Apprentice Scrapper";
+if (cells && cells[1] && cells[10]) {
+    const dwarfName = cells[1].v;
+    const gloryPoints = parseFloat(cells[10].v) || 0;
+    const title = cells[11] ? cells[11].v : "Apprentice Scrapper";
                         
                         if (dwarfName && !dwarfName.toLowerCase().includes('hoard') && gloryPoints > 0) {
                             dwarves.push({
