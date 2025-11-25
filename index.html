@@ -2285,8 +2285,8 @@
                     silver925: parseFloat(pricesRows[2].c[0].v),
                     silver900: parseFloat(pricesRows[3].c[0].v),
                     silver350: parseFloat(pricesRows[4].c[0].v),
-                    gold: parseFloat(pricesRows[4].c[0].v),
-                    platinum: parseFloat(pricesRows[5].c[0].v)
+                    gold: parseFloat(pricesRows[5].c[0].v),
+                    platinum: parseFloat(pricesRows[6].c[0].v)
                 };
                 
                 displayHoard(metals, prices);
@@ -2311,19 +2311,18 @@
                 if (metalLower.includes('copper')) {
                     value = weight * prices.copper * 0.999;
                     icon = '<img src="copperbar.png" alt="Copper" class="metal-icon">';
-                } else if (metalLower.includes('silver')) {
-                    icon = '<img src="silverbar.png" alt="Silver" class="metal-icon">';
-                    if (metalLower.includes('.925') || metalLower.includes('925')) {
-                        value = weight * prices.silver925 * 0.999;
-                    } else if (metalLower.includes('.900') || metalLower.includes('900')) {
-                        value = weight * prices.silver900 * 0.999;
-                        } else if (metalLower.includes('.350') || metalLower.includes('350')) {
-    value = weight * prices.silver350 * 0.999;
-}
-                    } else {
-                        value = weight * prices.silver999 * 0.999;
-                    }
-                } else if (metalLower.includes('gold')) {
+           } else if (metalLower.includes('silver')) {
+    icon = '<img src="silverbar.png" alt="Silver" class="metal-icon">';
+    if (metalLower.includes('.925') || metalLower.includes('925')) {
+        value = weight * prices.silver925 * 0.999;
+    } else if (metalLower.includes('.900') || metalLower.includes('900')) {
+        value = weight * prices.silver900 * 0.999;
+    } else if (metalLower.includes('.350') || metalLower.includes('350')) {
+        value = weight * prices.silver350 * 0.999;
+    } else {
+        value = weight * prices.silver999 * 0.999;
+    }
+} else if (metalLower.includes('gold')) {
                     value = weight * prices.gold * 0.999;
                     icon = '<img src="goldbar.png" alt="Gold" class="metal-icon">';
                 } else if (metalLower.includes('platinum')) {
